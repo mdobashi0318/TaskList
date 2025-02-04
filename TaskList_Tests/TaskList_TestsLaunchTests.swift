@@ -1,13 +1,13 @@
 //
-//  TaskListUITestsLaunchTests.swift
-//  TaskListUITests
+//  TaskList_TestsLaunchTests.swift
+//  TaskList_Tests
 //
 //  Created by 土橋正晴 on 2025/02/05.
 //
 
 import XCTest
 
-final class TaskListUITestsLaunchTests: XCTestCase {
+final class TaskList_TestsLaunchTests: XCTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true

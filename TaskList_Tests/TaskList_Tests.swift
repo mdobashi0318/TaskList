@@ -1,13 +1,13 @@
 //
-//  TaskListUITests.swift
-//  TaskListUITests
+//  TaskList_Tests.swift
+//  TaskList_Tests
 //
 //  Created by 土橋正晴 on 2025/02/05.
 //
 
 import XCTest
 
-final class TaskListUITests: XCTestCase {
+final class TaskList_Tests: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.

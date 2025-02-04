@@ -1,0 +1,119 @@
+name: TaskList
+targets:
+  TaskList:
+    type: application
+    platform: iOS
+    deploymentTarget: &deployment_target "17.0"
+    info:
+      path: TaskList/Info.plist
+      properties:
+        UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
+        UILaunchStoryboardName: LaunchScreen
+    entitlements:
+      path: TaskList/TaskList.entitlements
+      properties:
+        com.apple.security.application-groups: [group.masaharu.dobashi.TaskList]
+    sources:
+         - TaskList
+    settings:
+        base:
+         ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: YES
+         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+         CODE_SIGN_STYLE: Automatic
+         DEVELOPMENT_ASSET_PATHS: "\"TaskList/Preview Content\""
+         DEVELOPMENT_TEAM: 7RPFL7EXKD
+         ENABLE_PREVIEWS: YES
+         INFOPLIST_FILE: TaskList/Info.plist
+         MARKETING_VERSION: &marketing_version 1.0.0
+         CURRENT_PROJECT_VERSIO: 1
+         PRODUCT_BUNDLE_IDENTIFIER: "masaharu.dobashi.TaskList"
+         PRODUCT_NAME: "$(TARGET_NAME)"
+         SWIFT_VERSION: 6
+    options:
+        developmentLanguage: ja
+    dependencies:
+        - package: Realm
+          product: RealmSwift
+        - package: Rswift
+          product: RswiftLibrary
+        - package: Alamofire
+    buildToolPlugins:
+        - plugin: RswiftGenerateInternalResources
+          package: Rswift
+        
+  TaskList_Tests:
+      type: bundle.unit-test
+      platform: iOS
+      sources:
+       - TaskList_Tests
+      settings:
+        base:
+         ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: YES
+         BUNDLE_LOADER: "$(TEST_HOST)"
+         CODE_SIGN_STYLE: Automatic
+         DEVELOPMENT_TEAM: 7RPFL7EXKD
+         INFOPLIST_FILE: TaskList_Tests/Info.plist
+         PRODUCT_BUNDLE_IDENTIFIER: "masaharu.dobashi.TaskList_Tests"
+         PRODUCT_NAME: "$(TARGET_NAME)"
+         TEST_HOST: "$(BUILT_PRODUCTS_DIR)/TaskList.app/TaskList"
+      dependencies:
+      - target: TaskList
+        
+        
+  TaskList_UITests:
+      type: bundle.ui-testing
+      platform: iOS
+      sources:
+        - TaskList_UITests
+      settings:
+        base:
+             ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: YES
+             CODE_SIGN_STYLE: Automatic
+             DEVELOPMENT_TEAM: 7RPFL7EXKD
+             INFOPLIST_FILE: TaskList_UITests/Info.plist
+             PRODUCT_BUNDLE_IDENTIFIER: "masaharu.dobashi.TaskList_UITests"
+             PRODUCT_NAME: "$(TARGET_NAME)"
+             TEST_TARGET_NAME: TaskList
+      dependencies:
+       - target: TaskList
+packages:
+ XcodeGen:
+    url: https://github.com/yonaskolb/XcodeGen
+    version: 2.42.0
+ Realm:
+    url: https://github.com/realm/realm-swift
+    version: 10.52.2
+ Rswift:
+    url: https://github.com/mac-cain13/R.swift
+    version: 7.4.0
+ Alamofire:
+    url: https://github.com/Alamofire/Alamofire
+    version: 5.9.1
+
+schemes:
+  TaskList:
+    build:
+      targets:
+        TaskList: all
+        TaskList_Tests: [test]
+        TaskList_UITests: [test]
+    run:
+      config: Debug
+    test:
+      config: Debug
+      gatherCoverageData: true
+      coverageTargets:
+        - TaskList
+      targets:
+        - name: TaskList_Tests
+          parallelizable: true
+          randomExecutionOrder: true
+        - name: TaskList_UITests
+          parallelizable: true
+          randomExecutionOrder: true
+    profile:
+      config: Release
+    analyze:
+      config: Debug
+    archive:
+      config: Release

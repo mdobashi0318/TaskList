@@ -36,7 +36,6 @@ targets:
           product: RealmSwift
         - package: Rswift
           product: RswiftLibrary
-        - package: Alamofire
     buildToolPlugins:
         - plugin: RswiftGenerateInternalResources
           package: Rswift
@@ -82,13 +81,10 @@ packages:
     version: 2.42.0
  Realm:
     url: https://github.com/realm/realm-swift
-    version: 10.52.2
+    version: 20.0.1
  Rswift:
     url: https://github.com/mac-cain13/R.swift
     version: 7.4.0
- Alamofire:
-    url: https://github.com/Alamofire/Alamofire
-    version: 5.9.1
 
 schemes:
   TaskList:

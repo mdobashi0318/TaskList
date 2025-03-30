@@ -3,7 +3,7 @@ targets:
   TaskList:
     type: application
     platform: iOS
-    deploymentTarget: &deployment_target "17.0"
+    deploymentTarget: &deployment_target "18.0"
     info:
       path: TaskList/Info.plist
       properties:
@@ -32,8 +32,6 @@ targets:
     options:
         developmentLanguage: ja
     dependencies:
-        - package: Realm
-          product: RealmSwift
         - package: Rswift
           product: RswiftLibrary
     buildToolPlugins:
@@ -79,9 +77,6 @@ packages:
  XcodeGen:
     url: https://github.com/yonaskolb/XcodeGen
     version: 2.42.0
- Realm:
-    url: https://github.com/realm/realm-swift
-    version: 20.0.1
  Rswift:
     url: https://github.com/mac-cain13/R.swift
     version: 7.4.0

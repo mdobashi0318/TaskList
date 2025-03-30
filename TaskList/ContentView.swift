@@ -6,16 +6,46 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ContentView: View {
+    
+    @Environment(\.modelContext) var modelContext
+    
+    @Query var taskList: [TaskModel]
+    
+    @State var addTaskViewFlg: Bool = false
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationStack {
+            List {
+                ForEach(taskList) { model in
+                    NavigationLink(value: model) {
+                        VStack {
+                            Text(model.title)
+                            Text("\(model.childTaskId.count) 個")
+                        }
+                    }
+                }
+            }
+            .navigationTitle("TaskList")
+            .navigationDestination(for: TaskModel.self) {
+                TaskDetailScreen(model: $0)
+            }
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button(action: {
+                        addTaskViewFlg.toggle()
+                    }, label: {
+                        Image(systemName: "plus")
+                    })
+                }
+            }
+            .fullScreenCover(isPresented: $addTaskViewFlg) {
+                AddTaskScreen()
+            }
         }
-        .padding()
+        
     }
 }
 

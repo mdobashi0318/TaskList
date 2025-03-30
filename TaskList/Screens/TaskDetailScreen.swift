@@ -26,6 +26,34 @@ struct TaskDetailScreen: View {
                 Text("詳細")
             })
             
+            Section(content: {
+                VStack {
+                    HStack {
+                        Text("開始日時: ")
+                        Spacer()
+                        Text(model.startDate ?? "")
+                    }
+                    Divider()
+                    HStack {
+                        Text("期日: ")
+                        Spacer()
+                        Text(model.deadline ?? "")
+                    }
+                }
+            }, header: {
+                Text("日時")
+            })
+            
+            
+            if model.priority != Prioritys.none.rawValue {
+                Section(content: {
+                    Text(Prioritys(rawValue: model.priority)?.title ?? Prioritys.none.title)
+                }, header: {
+                    Text("優先順位")
+                })
+            }
+            
+            
             taskSection(title: "未実施", model.childTaskId, status: .notImplemented)
             taskSection(title: "実施中", model.childTaskId, status: .inProcess)
             taskSection(title: "完了", model.childTaskId, status: .done)

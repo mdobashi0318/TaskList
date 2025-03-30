@@ -19,9 +19,9 @@ class TaskModel {
     /// 小タスク
     var childTaskId: [String] = []
     /// 開始日
-    var startDate: Date?
+    var startDate: String?
     /// 期限
-    var deadline: Date?
+    var deadline: String?
     /// 優先度
     var priority: String = Prioritys.none.rawValue
     /// 状態
@@ -35,7 +35,7 @@ class TaskModel {
     
     init() {}
     
-    init(id: String, title: String, detail: String, childTaskId: [String], startDate: Date? = nil, deadline: Date? = nil, priority: String, status: String, tag: String? = nil, created_at: String, updated_at: String) {
+    init(id: String, title: String, detail: String, childTaskId: [String], startDate: String? = nil, deadline: String? = nil, priority: String, status: String, tag: String? = nil, created_at: String, updated_at: String) {
         self.id = id
         self.title = title
         self.detail = detail
@@ -50,7 +50,7 @@ class TaskModel {
     }
     
     
-    func add(id: String, title: String, detail: String, startDate: Date? = nil, deadline: Date? = nil, priority: String, tag: String? = nil) {
+    func add(id: String, title: String, detail: String, startDate: String?, deadline: String?, priority: String, tag: String? = nil) {
         let created_at = DateFormatter.created_at
         
         self.id = id
@@ -59,7 +59,7 @@ class TaskModel {
         self.childTaskId = []
         self.startDate = startDate
         self.deadline = deadline
-        self.priority = Prioritys.none.rawValue
+        self.priority = priority
         self.status = TaskStatus.notImplemented.rawValue
         self.tag = tag
         self.created_at = created_at

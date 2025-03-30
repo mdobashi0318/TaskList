@@ -22,9 +22,11 @@ struct AddTaskScreen: View {
     @State private var detail: String = ""
 
     
+    @State private var isSetStartDate = false
     @State private var startDate: Date = Date()
     @State private var startDateStr: String = ""
     
+    @State private var isSetEndDate = false
     @State private var endDate: Date = Date()
     @State private var endDateStr: String = ""
     
@@ -46,17 +48,27 @@ struct AddTaskScreen: View {
                 })
                 
                 Section(content: {
-                    DatePicker("開始日時を選択してください", selection: $startDate)
-                    DatePicker("期日を選択してください", selection: $endDate)
+                    Toggle("開始日時をセットする", isOn: $isSetStartDate)
+                    
+                    if isSetStartDate {
+                        DatePicker("開始日時を選択してください", selection: $startDate)
+                    }
+                    
+                    Toggle("期日をセットする", isOn: $isSetEndDate)
+                    
+                    if isSetEndDate {
+                        DatePicker("期日を選択してください", selection: $endDate)
+                    }
+                    
                 }, header: {
                     Text("日時")
                 })
                 
                 
                 Section(content: {
-                    Picker("優先度を選択してください", selection: $priority) {
+                    Picker("優先順位", selection: $priority) {
                         ForEach(Prioritys.allCases) {
-                            Text($0.rawValue)
+                            Text($0.title)
                                 .tag($0)
                         }
                     }
@@ -94,6 +106,8 @@ struct AddTaskScreen: View {
         taskModel.add(id: UUID().uuidString,
                       title: title,
                       detail: detail,
+                      startDate: isSetStartDate ? DateFormatter.format_yyyyMMddHHmm(startDate) : nil,
+                      deadline: isSetEndDate ? DateFormatter.format_yyyyMMddHHmm(endDate) : nil,
                       priority: priority.rawValue,
                       tag: "")
         

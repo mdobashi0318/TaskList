@@ -10,9 +10,23 @@ import Foundation
 enum Prioritys: String, CaseIterable, Identifiable {
     case none = "0"
     case low = "1"
-    case normal = "2"
+    case medium = "2"
     case high = "3"
     
     
     var id: String { self.rawValue }
+    
+    
+    var title: String {
+        switch self {
+        case .low:
+            "低"
+        case .medium:
+            "中"
+        case .high:
+            "高"
+        case .none:
+            ""
+        }
+    }
 }

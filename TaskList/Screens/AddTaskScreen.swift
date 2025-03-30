@@ -20,17 +20,18 @@ struct AddTaskScreen: View {
     @State private var title: String = ""
     
     @State private var detail: String = ""
-
     
     @State private var isSetStartDate = false
     @State private var startDate: Date = Date()
-    @State private var startDateStr: String = ""
     
     @State private var isSetEndDate = false
     @State private var endDate: Date = Date()
-    @State private var endDateStr: String = ""
     
     @State private var priority: Prioritys = .none
+    
+    @State private var isValidation = false
+    @State private var validationMessage = "未入力箇所があります。"
+    
     
     var body: some View {
         NavigationStack {
@@ -78,30 +79,46 @@ struct AddTaskScreen: View {
                 
                 
             }
-                .navigationTitle("追加")
-                .toolbar {
-                    ToolbarItem(placement: .topBarLeading) {
-                        Button(action: {
-                            dismiss()
-                        }, label: {
-                            Image(systemName: "xmark")
-                        })
-                    }
-                    
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Button(action: {
-                            addTask()
-                        }, label: {
-                            Image(systemName: "plus")
-                        })
-                    }
+            .navigationTitle("追加")
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button(action: {
+                        dismiss()
+                    }, label: {
+                        Image(systemName: "xmark")
+                    })
                 }
                 
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button(action: {
+                        addTask()
+                    }, label: {
+                        Image(systemName: "plus")
+                    })
+                }
+            }
+            .alert(validationMessage, isPresented: $isValidation, actions: {
+                Button(role: .cancel, action: {
+                    isValidation.toggle()
+                }, label: {
+                    Text("閉じる")
+                })
+            })
         }
     }
     
     
     private func addTask() {
+        if title.isEmpty {
+            validationMessage = "タイトルを入力してください。"
+            isValidation = true
+            return
+        } else if detail.isEmpty {
+            validationMessage = "詳細を入力してください"
+            isValidation = true
+            return
+        }
+        
         let taskModel = TaskModel()
         taskModel.add(id: UUID().uuidString,
                       title: title,

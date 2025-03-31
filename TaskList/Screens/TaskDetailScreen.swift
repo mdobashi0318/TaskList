@@ -5,12 +5,19 @@
 //  Created by 土橋正晴 on 2025/03/17.
 //
 
-import Foundation
 import SwiftUI
+import SwiftData
 
 struct TaskDetailScreen: View {
     
-    var model: TaskModel
+    @Environment(\.dismiss) private var dismiss
+    
+    @Environment(\.modelContext) var modelContext
+    
+    @Bindable var model: TaskModel
+    
+    @State private var isShowAlert: Bool = false
+    @State private var alertMessage = ""
     
     var body: some View {
         List {
@@ -59,6 +66,22 @@ struct TaskDetailScreen: View {
             taskSection(title: "完了", model.childTaskId, status: .done)
         }
         .navigationTitle("Task詳細")
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button(action: {
+                    deleteTask()
+                }, label: {
+                    Image(systemName: "trash")
+                })
+            }
+        }
+        .alert(alertMessage, isPresented: $isShowAlert, actions: {
+            Button(role: .cancel, action: {
+                isShowAlert.toggle()
+            }, label: {
+                Text("閉じる")
+            })
+        })
     }
     
     private func taskSection(title: String, _ taskModel: [String], status: TaskStatus) -> some View {
@@ -85,4 +108,17 @@ struct TaskDetailScreen: View {
         })
     }
     
+    
+    private func deleteTask() {
+        do {
+            modelContext.delete(model)
+            try modelContext.save()
+            dismiss()
+        } catch {
+            alertMessage = "削除に失敗しました。"
+            isShowAlert = true
+            print("削除に失敗しました。 error: \(error)")
+        }
+        
+    }
 }

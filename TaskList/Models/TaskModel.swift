@@ -50,10 +50,10 @@ class TaskModel {
     }
     
     
-    func add(id: String, title: String, detail: String, startDate: String?, deadline: String?, priority: String, tag: String? = nil) {
+    func add(title: String, detail: String, startDate: String?, deadline: String?, priority: String, tag: String? = nil) {
         let created_at = DateFormatter.created_at
         
-        self.id = id
+        self.id = UUID().uuidString
         self.title = title
         self.detail = detail
         self.childTaskId = []

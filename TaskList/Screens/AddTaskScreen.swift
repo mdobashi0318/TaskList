@@ -119,17 +119,23 @@ struct AddTaskScreen: View {
             return
         }
         
-        let taskModel = TaskModel()
-        taskModel.add(id: UUID().uuidString,
-                      title: title,
-                      detail: detail,
-                      startDate: isSetStartDate ? DateFormatter.format_yyyyMMddHHmm(startDate) : nil,
-                      deadline: isSetEndDate ? DateFormatter.format_yyyyMMddHHmm(endDate) : nil,
-                      priority: priority.rawValue,
-                      tag: "")
+        do {
+            let taskModel = TaskModel()
+            taskModel.add(title: title,
+                          detail: detail,
+                          startDate: isSetStartDate ? DateFormatter.format_yyyyMMddHHmm(startDate) : nil,
+                          deadline: isSetEndDate ? DateFormatter.format_yyyyMMddHHmm(endDate) : nil,
+                          priority: priority.rawValue,
+                          tag: "")
+            
+            modelContext.insert(taskModel)
+            try modelContext.save()
+            dismiss()
+        } catch {
+            validationMessage = "追加に失敗しました"
+            isValidation = true
+        }
         
         
-        modelContext.insert(taskModel)
-        dismiss()
     }
 }

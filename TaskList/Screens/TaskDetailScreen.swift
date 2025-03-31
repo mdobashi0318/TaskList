@@ -19,6 +19,8 @@ struct TaskDetailScreen: View {
     @State private var isShowAlert: Bool = false
     @State private var alertMessage = ""
     
+    @State private var isConfirmAlert = false
+    
     var body: some View {
         List {
             Section(content: {
@@ -69,12 +71,25 @@ struct TaskDetailScreen: View {
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button(action: {
-                    deleteTask()
+                    isConfirmAlert.toggle()
                 }, label: {
                     Image(systemName: "trash")
                 })
             }
         }
+        .alert("削除しますか?", isPresented: $isConfirmAlert, actions: {
+            Button(role: .cancel, action: {
+                isConfirmAlert.toggle()
+            }, label: {
+                Text("キャンセル")
+            })
+            
+            Button(role: .destructive, action: {
+                deleteTask()
+            }, label: {
+                Text("削除")
+            })
+        })
         .alert(alertMessage, isPresented: $isShowAlert, actions: {
             Button(role: .cancel, action: {
                 isShowAlert.toggle()

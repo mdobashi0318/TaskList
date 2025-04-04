@@ -82,18 +82,14 @@ struct AddTaskScreen: View {
             .navigationTitle("追加")
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button(action: {
+                    CloseButton(action: {
                         dismiss()
-                    }, label: {
-                        Image(systemName: "xmark")
                     })
                 }
                 
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button(action: {
+                    AddButton(action: {
                         addTask()
-                    }, label: {
-                        Image(systemName: "plus")
                     })
                 }
             }

@@ -80,13 +80,11 @@ struct EditTaskScreen: View {
                 
                 
             }
-            .navigationTitle("追加")
+            .navigationTitle("編集")
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button(action: {
+                    CloseButton(action: {
                         dismiss()
-                    }, label: {
-                        Image(systemName: "xmark")
                     })
                 }
                 
@@ -94,7 +92,7 @@ struct EditTaskScreen: View {
                     Button(action: {
                         addTask()
                     }, label: {
-                        Image(systemName: "plus")
+                        Text("Done")
                     })
                 }
             }

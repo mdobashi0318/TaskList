@@ -21,6 +21,10 @@ struct TaskDetailScreen: View {
     
     @State private var isConfirmAlert = false
     
+    @State private var isConfirmationDialog: Bool = false
+    
+    @State private var isShowEditSheet: Bool = false
+    
     var body: some View {
         List {
             Section(content: {
@@ -70,10 +74,8 @@ struct TaskDetailScreen: View {
         .navigationTitle("Task詳細")
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                Button(action: {
-                    isConfirmAlert.toggle()
-                }, label: {
-                    Image(systemName: "trash")
+                EllipsisButton(action: {
+                    isConfirmationDialog.toggle()
                 })
             }
         }
@@ -97,6 +99,26 @@ struct TaskDetailScreen: View {
                 Text("閉じる")
             })
         })
+        .confirmationDialog("このタスクをどうしますか？", isPresented: $isConfirmationDialog, actions: {
+            Button(role: .none, action: {
+                isShowEditSheet.toggle()
+            },label: {
+                Text("編集")
+            })
+            Button(role: .destructive, action: {
+                isConfirmAlert.toggle()
+            },label: {
+                Text("削除")
+            })
+            Button(role: .cancel, action: {
+                isConfirmationDialog = false
+            }, label: {
+                Text("キャンセル")
+            })
+        })
+        .fullScreenCover(isPresented: $isShowEditSheet) {
+            EditTaskScreen(model: model)
+        }
     }
     
     private func taskSection(title: String, _ taskModel: [String], status: TaskStatus) -> some View {

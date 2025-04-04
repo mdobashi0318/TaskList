@@ -33,4 +33,14 @@ extension DateFormatter {
         return dateFormatter.string(from: date)
     }
         
+    // String型をyyy/MM/dd HH:mm形式でDate型を返す
+    static func format_yyyyMMddHHmm_str(_ date: String) -> Date {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy/MM/dd HH:mm"
+        dateFormatter.timeZone = TimeZone(identifier: "Asia/Tokyo")
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        
+        return dateFormatter.date(from: date) ?? Date.now
+    }
+
 }

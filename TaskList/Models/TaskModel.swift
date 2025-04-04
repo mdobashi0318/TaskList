@@ -65,5 +65,15 @@ class TaskModel {
         self.created_at = created_at
         self.updated_at = created_at
     }
+ 
+    
+    func update(startDate: String?, deadline: String?, tag: String? = nil) {
+        self.childTaskId = []
+        self.startDate = startDate
+        self.deadline = deadline
+        self.status = TaskStatus.notImplemented.rawValue
+        self.tag = tag
+        self.updated_at = DateFormatter.created_at
+    }
     
 }

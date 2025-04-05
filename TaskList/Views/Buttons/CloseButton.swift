@@ -9,10 +9,12 @@ import SwiftUI
 
 struct CloseButton: View {
     
+    var role: ButtonRole = .cancel
+    
     var action: () -> Void
     
     var body: some View {
-        Button(action: {
+        Button(role: role, action: {
             action()
         }, label: {
             Image(systemName: "xmark")

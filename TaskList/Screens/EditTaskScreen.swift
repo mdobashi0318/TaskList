@@ -84,13 +84,14 @@ struct EditTaskScreen: View {
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     CloseButton(action: {
+                        modelContext.rollback()
                         dismiss()
                     })
                 }
                 
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(action: {
-                        addTask()
+                        updateTask()
                     }, label: {
                         Text("Done")
                     })
@@ -107,7 +108,12 @@ struct EditTaskScreen: View {
     }
     
     
-    private func addTask() {
+    private func updateTask() {
+        guard modelContext.hasChanges else {
+            dismiss()
+            return
+        }
+        
         if model.title.isEmpty {
             validationMessage = "タイトルを入力してください。"
             isValidation = true
@@ -123,7 +129,6 @@ struct EditTaskScreen: View {
                           deadline: isSetEndDate ? DateFormatter.format_yyyyMMddHHmm(endDate) : nil,
                           tag: "")
             
-            modelContext.insert(model)
             try modelContext.save()
             dismiss()
         } catch {

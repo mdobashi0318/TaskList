@@ -11,7 +11,7 @@ import SwiftData
 @Model
 class TaskModel {
     
-    var id: String = ""
+    @Attribute(.unique) var id: String = ""
     
     var title: String = ""
     /// 詳細

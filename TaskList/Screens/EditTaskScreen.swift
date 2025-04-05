@@ -16,12 +16,9 @@ struct EditTaskScreen: View {
     @State var model: TaskModel
     
     @State private var isSetStartDate = false
-    @State private var startDate: Date = Date()
     
     @State private var isSetEndDate = false
-    @State private var endDate: Date = Date()
     
-
     @State private var isValidation = false
     @State private var validationMessage = "未入力箇所があります。"
     
@@ -29,8 +26,6 @@ struct EditTaskScreen: View {
         _model = State(initialValue: model)
         _isSetStartDate = State(initialValue: model.startDate != nil)
         _isSetEndDate = State(initialValue: model.deadline != nil)
-        _startDate = State(initialValue: DateFormatter.format_yyyyMMddHHmm_str(model.startDate ?? ""))
-        _endDate = State(initialValue: DateFormatter.format_yyyyMMddHHmm_str(model.deadline ?? ""))
     }
     
     
@@ -53,13 +48,13 @@ struct EditTaskScreen: View {
                     Toggle("開始日時をセットする", isOn: $isSetStartDate)
                     
                     if isSetStartDate {
-                        DatePicker("開始日時を選択してください", selection: $startDate)
+                        DatePicker("開始日時を選択してください", selection: $model.noSaveStartDate)
                     }
                     
                     Toggle("期日をセットする", isOn: $isSetEndDate)
                     
                     if isSetEndDate {
-                        DatePicker("期日を選択してください", selection: $endDate)
+                        DatePicker("期日を選択してください", selection: $model.noSaveDeadline)
                     }
                     
                 }, header: {
@@ -125,10 +120,7 @@ struct EditTaskScreen: View {
         }
         
         do {
-            model.update(startDate: isSetStartDate ? DateFormatter.format_yyyyMMddHHmm(startDate) : nil,
-                          deadline: isSetEndDate ? DateFormatter.format_yyyyMMddHHmm(endDate) : nil,
-                          tag: "")
-            
+            model.update(isSetStartDate: isSetStartDate, isSetEndDate: isSetEndDate)
             try modelContext.save()
             dismiss()
         } catch {

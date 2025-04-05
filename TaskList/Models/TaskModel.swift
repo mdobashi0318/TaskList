@@ -33,6 +33,26 @@ class TaskModel {
     
     var updated_at: String = ""
     
+    
+    @Transient
+    var noSaveStartDate: Date {
+        get {
+            DateFormatter.format_yyyyMMddHHmm_str(startDate ?? "")
+        } set {
+            startDate = DateFormatter.format_yyyyMMddHHmm(newValue)
+        }
+    }
+    
+    
+    @Transient
+    var noSaveDeadline: Date {
+        get {
+            DateFormatter.format_yyyyMMddHHmm_str(deadline ?? "")
+        } set {
+            deadline = DateFormatter.format_yyyyMMddHHmm(newValue)
+        }
+    }
+    
     init() {}
     
     init(id: String, title: String, detail: String, childTaskId: [String], startDate: String? = nil, deadline: String? = nil, priority: String, status: String, tag: String? = nil, created_at: String, updated_at: String) {
@@ -65,13 +85,11 @@ class TaskModel {
         self.created_at = created_at
         self.updated_at = created_at
     }
- 
     
-    func update(startDate: String?, deadline: String?, tag: String? = nil) {
-        self.childTaskId = []
-        self.startDate = startDate
-        self.deadline = deadline
-        self.status = TaskStatus.notImplemented.rawValue
+    
+    func update(tag: String? = nil, isSetStartDate: Bool, isSetEndDate: Bool) {
+        if !isSetStartDate { startDate = nil }
+        if !isSetEndDate { deadline = nil }
         self.tag = tag
         self.updated_at = DateFormatter.created_at
     }

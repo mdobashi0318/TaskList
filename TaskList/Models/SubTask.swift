@@ -12,21 +12,52 @@ import SwiftData
 @Model
 class SubTask {
     
-    var id: String
+    @Attribute(.unique) var id: String = ""
     
-    var title: String
+    var title: String = ""
     /// 詳細
-    var detail: String
+    var detail: String = ""
     /// 親タスク
-    var parentTaskId: String
+    var parentTaskId: String = ""
     /// 開始日
-    var startDate: Date?
+    var startDate: String?
+    /// 期限
+    var deadline: String?
+    /// 優先度
+    var priority: String = Prioritys.none.rawValue
     /// 実施状況
     var status: String = TaskStatus.notImplemented.rawValue
+    /// タグ
+    var tag: String?
+    
+    var created_at: String = ""
+    
+    var updated_at: String = ""
     
     
+    @Transient
+    var noSaveStartDate: Date {
+        get {
+            DateFormatter.format_yyyyMMddHHmm_str(startDate ?? "")
+        } set {
+            startDate = DateFormatter.format_yyyyMMddHHmm(newValue)
+        }
+    }
     
-    init (id: String, title: String, detail: String, parentTaskId: String, startDate: Date? = nil, status: String) {
+    
+    @Transient
+    var noSaveDeadline: Date {
+        get {
+            DateFormatter.format_yyyyMMddHHmm_str(deadline ?? "")
+        } set {
+            deadline = DateFormatter.format_yyyyMMddHHmm(newValue)
+        }
+    }
+    
+    
+    init() { }
+    
+    init(id: String, title: String, detail: String, parentTaskId: String, startDate: String? = nil, status: String) {
         self.id = id
         self.title = title
         self.detail = detail
@@ -34,6 +65,29 @@ class SubTask {
         self.startDate = startDate
         self.status = status
     }
+    
+    func add(title: String, detail: String, parentTaskId: String, startDate: String?, deadline: String?, priority: String, tag: String? = nil) {
+        let created_at = DateFormatter.created_at
+        
+        self.id = UUID().uuidString
+        self.title = title
+        self.detail = detail
+        self.parentTaskId = parentTaskId
+        self.startDate = startDate
+        self.deadline = deadline
+        self.priority = priority
+        self.status = TaskStatus.notImplemented.rawValue
+        self.created_at = created_at
+        self.updated_at = created_at
+    }
+    
+    
+    func update(isSetStartDate: Bool, isSetEndDate: Bool) {
+        if !isSetStartDate { startDate = nil }
+        if !isSetEndDate { deadline = nil }
+        self.updated_at = DateFormatter.created_at
+    }
+    
     
 }
 

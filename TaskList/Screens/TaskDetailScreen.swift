@@ -14,7 +14,7 @@ struct TaskDetailScreen: View {
     
     @Environment(\.modelContext) var modelContext
     
-    @Bindable var model: TaskModel
+    @Bindable private var model: TaskModel
     
     @State private var isShowAlert: Bool = false
     @State private var alertMessage = ""
@@ -25,6 +25,19 @@ struct TaskDetailScreen: View {
     
     @State private var isShowEditSheet: Bool = false
     
+    @State private var isShowAddSubTaskSheet: Bool = false
+    
+    @Query private var subTasks: [SubTask] = []
+    
+    var test = ""
+    init(model: TaskModel) {
+        self.model = model
+        let modelId = model.id
+        _subTasks = Query(filter: #Predicate<SubTask> { subTask in
+            subTask.parentTaskId == modelId
+        })
+    }
+        
     var body: some View {
         List {
             Section(content: {
@@ -67,7 +80,7 @@ struct TaskDetailScreen: View {
             }
             
             
-            taskSection(title: "未実施", model.childTaskId, status: .notImplemented)
+            taskSection(title: "未実施", model.childTaskId, status: .notImplemented, shouldAddButton: true)
             taskSection(title: "実施中", model.childTaskId, status: .inProcess)
             taskSection(title: "完了", model.childTaskId, status: .done)
         }
@@ -119,10 +132,15 @@ struct TaskDetailScreen: View {
         .fullScreenCover(isPresented: $isShowEditSheet) {
             EditTaskScreen(model: model)
         }
+        .fullScreenCover(isPresented: $isShowAddSubTaskSheet) {
+            AddSubTaskScreen(taskModel: model)
+        }
     }
     
-    private func taskSection(title: String, _ taskModel: [String], status: TaskStatus) -> some View {
-        let dispModel = [SubTask]()
+    private func taskSection(title: String, _ taskModel: [String], status: TaskStatus, shouldAddButton: Bool = false) -> some View {
+        let dispModel = subTasks.filter({
+            $0.status == status.rawValue
+        })
         return Section(content: {
             ScrollView(.horizontal) {
                 Grid {
@@ -141,7 +159,15 @@ struct TaskDetailScreen: View {
                 }
             }
         }, header: {
-            Text(title)
+            HStack {
+                Text(title)
+                if shouldAddButton {
+                    Spacer()
+                    AddButton(action: {
+                        isShowAddSubTaskSheet.toggle()
+                    })
+                }
+            }
         })
     }
     

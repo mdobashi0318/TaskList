@@ -129,6 +129,9 @@ struct TaskDetailScreen: View {
                 Text("キャンセル")
             })
         })
+        .navigationDestination(for: SubTask.self) {
+            SubTaskDetailScreen(subTask: $0)
+        }
         .fullScreenCover(isPresented: $isShowEditSheet) {
             EditTaskScreen(model: model)
         }
@@ -146,14 +149,17 @@ struct TaskDetailScreen: View {
                 Grid {
                     GridRow {
                         ForEach(dispModel, id: \.id) { child in
-                            RoundedRectangle(cornerRadius: 5)
-                                .stroke(lineWidth: 1)
-                                .foregroundStyle(.secondary)
-                                .background(Color.clear)
-                                .frame(width: 100, height: 50)
-                                .overlay  {
-                                    Text(child.title)
-                                }
+                            NavigationLink(value: child) {
+                                
+                                RoundedRectangle(cornerRadius: 5)
+                                    .stroke(lineWidth: 1)
+                                    .foregroundStyle(.secondary)
+                                    .background(Color.clear)
+                                    .frame(width: 100, height: 50)
+                                    .overlay  {
+                                        Text(child.title)
+                                    }
+                            }
                         }
                     }
                 }

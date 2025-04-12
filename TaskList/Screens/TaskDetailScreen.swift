@@ -27,7 +27,7 @@ struct TaskDetailScreen: View {
     
     @State private var isShowAddSubTaskSheet: Bool = false
     
-    @Query private var subTasks: [SubTask] = []
+    @Query private var subTasks: [SubTask]
     
     var test = ""
     init(model: TaskModel) {

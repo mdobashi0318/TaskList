@@ -82,6 +82,7 @@ struct TaskDetailScreen: View {
             
             taskSection(title: "未実施", model.childTaskId, status: .notImplemented, shouldAddButton: true)
             taskSection(title: "実施中", model.childTaskId, status: .inProcess)
+            taskSection(title: "保留", model.childTaskId, status: .pending)
             taskSection(title: "完了", model.childTaskId, status: .done)
         }
         .navigationTitle("Task詳細")

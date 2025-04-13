@@ -68,6 +68,17 @@ struct SubTaskDetailScreen: View {
             }, header: {
                 Text("日時")
             })
+            
+            Section(content: {
+                Picker("ステータス", selection: $subTask.status) {
+                    ForEach(TaskStatus.allCases) {
+                        Text($0.title)
+                            .tag($0)
+                    }
+                }
+            }, header: {
+                Text("日時")
+            })
         }
         .navigationTitle("サブタスク詳細")
         .navigationBarBackButtonHidden()

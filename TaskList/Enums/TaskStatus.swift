@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum TaskStatus: String, CaseIterable {
+enum TaskStatus: String, CaseIterable, Identifiable {
     /// 未実施
     case notImplemented = "0"
     /// 実施中
@@ -15,5 +15,22 @@ enum TaskStatus: String, CaseIterable {
     /// 完了
     case done = "2"
     /// 中止
-    case suspension = "3"
+    case pending = "3"
+    
+    
+    var id: String { self.rawValue }
+    
+    
+    var title: String {
+        switch self {
+        case .notImplemented:
+            "未実施"
+        case .inProcess:
+            "実施中"
+        case .done:
+            "完了"
+        case .pending:
+            "保留"
+        }
+    }
 }

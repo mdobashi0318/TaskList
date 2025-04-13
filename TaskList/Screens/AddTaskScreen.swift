@@ -30,56 +30,54 @@ struct AddTaskScreen: View {
     @State private var priority: Prioritys = .none
     
     @State private var isValidation = false
-    @State private var validationMessage = "未入力箇所があります。"
+    @State private var validationMessage = R.string.message.notYetEntered()
     
     
     var body: some View {
         NavigationStack {
             List {
                 Section(content: {
-                    TextField("タイトルを入力してください", text: $title)
+                    TextField(R.string.message.inputTitle(), text: $title)
                 }, header: {
-                    Text("タイトル")
+                    Text(R.string.label.title())
                 })
                 
                 Section(content: {
-                    TextField("タイトルを入力してください", text: $detail)
+                    TextField(R.string.message.inputDetail(), text: $detail)
                 }, header: {
-                    Text("詳細")
+                    Text(R.string.label.detail())
                 })
                 
                 Section(content: {
-                    Toggle("開始日時をセットする", isOn: $isSetStartDate)
+                    Toggle(R.string.message.isSetStartDate(), isOn: $isSetStartDate)
                     
                     if isSetStartDate {
-                        DatePicker("開始日時を選択してください", selection: $startDate)
+                        DatePicker(R.string.message.inputStartDate(), selection: $startDate)
                     }
                     
-                    Toggle("期日をセットする", isOn: $isSetEndDate)
+                    Toggle(R.string.message.isSetDeadline(), isOn: $isSetEndDate)
                     
                     if isSetEndDate {
-                        DatePicker("期日を選択してください", selection: $endDate)
+                        DatePicker(R.string.message.inputDeadline(), selection: $endDate)
                     }
                     
                 }, header: {
-                    Text("日時")
+                    Text(R.string.label.date())
                 })
                 
                 
                 Section(content: {
-                    Picker("優先順位", selection: $priority) {
+                    Picker(R.string.label.priority(), selection: $priority) {
                         ForEach(Prioritys.allCases) {
                             Text($0.title)
                                 .tag($0)
                         }
                     }
-                }, header: {
-                    Text("日時")
                 })
                 
                 
             }
-            .navigationTitle("追加")
+            .navigationTitle(R.string.screenTitle.addTaskScreen())
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     CloseButton(action: {
@@ -97,7 +95,7 @@ struct AddTaskScreen: View {
                 Button(role: .cancel, action: {
                     isValidation.toggle()
                 }, label: {
-                    Text("閉じる")
+                    Text(R.string.button.close())
                 })
             })
         }
@@ -106,11 +104,11 @@ struct AddTaskScreen: View {
     
     private func addTask() {
         if title.isEmpty {
-            validationMessage = "タイトルを入力してください。"
+            validationMessage = R.string.message.inputTitle()
             isValidation = true
             return
         } else if detail.isEmpty {
-            validationMessage = "詳細を入力してください"
+            validationMessage = R.string.message.inputDetail()
             isValidation = true
             return
         }
@@ -128,7 +126,7 @@ struct AddTaskScreen: View {
             try modelContext.save()
             dismiss()
         } catch {
-            validationMessage = "追加に失敗しました"
+            validationMessage = R.string.message.addError()
             isValidation = true
         }
         

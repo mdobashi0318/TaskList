@@ -1,0 +1,20 @@
+/* 
+  message.strings
+  TaskList
+
+  Created by 土橋正晴 on 2025/04/13.
+  
+*/
+
+"InputTitle" = "タイトルを入力してください";
+"InputDetail" = "詳細を入力してください";
+"isSetStartDate" = "開始日時をセットする";
+"isSetDeadline" = "期日をセットする";
+"inputStartDate" = "開始日時を選択してください";
+"inputDeadline" = "期日を選択してください";
+
+"notYetEntered" = "未入力箇所があります。";
+
+
+/// MARK: - Error
+"AddError" = "追加に失敗しました";

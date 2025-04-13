@@ -1,0 +1,13 @@
+/* 
+  Label.strings
+  TaskList
+
+  Created by 土橋正晴 on 2025/04/13.
+  
+*/
+
+
+"Title" = "タイトル";
+"Detail" = "詳細";
+"Date" = "日時";
+"Priority" = "優先順位";

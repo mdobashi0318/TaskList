@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 enum Prioritys: String, CaseIterable, Identifiable {
     case none = "0"
@@ -27,6 +28,20 @@ enum Prioritys: String, CaseIterable, Identifiable {
             "高"
         case .none:
             ""
+        }
+    }
+    
+    
+    var color: Color {
+        switch self {
+        case .low:
+                .blue
+        case .medium:
+                .yellow
+        case .high:
+                .red
+        case .none:
+                .clear
         }
     }
 }

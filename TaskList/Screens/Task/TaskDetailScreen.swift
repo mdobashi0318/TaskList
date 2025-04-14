@@ -29,7 +29,6 @@ struct TaskDetailScreen: View {
     
     @Query private var subTasks: [SubTask]
     
-    var test = ""
     init(model: TaskModel) {
         self.model = model
         let modelId = model.id
@@ -52,24 +51,7 @@ struct TaskDetailScreen: View {
                 Text("詳細")
             })
             
-            Section(content: {
-                VStack {
-                    HStack {
-                        Text("開始日時: ")
-                        Spacer()
-                        Text(model.startDate ?? "")
-                    }
-                    Divider()
-                    HStack {
-                        Text("期日: ")
-                        Spacer()
-                        Text(model.deadline ?? "")
-                    }
-                }
-            }, header: {
-                Text("日時")
-            })
-            
+            dateSection
             
             if model.priority != Prioritys.none.rawValue {
                 Section(content: {
@@ -80,10 +62,10 @@ struct TaskDetailScreen: View {
             }
             
             
-            taskSection(title: "未実施", model.childTaskId, status: .notImplemented, shouldAddButton: true)
-            taskSection(title: "実施中", model.childTaskId, status: .inProcess)
-            taskSection(title: "保留", model.childTaskId, status: .pending)
-            taskSection(title: "完了", model.childTaskId, status: .done)
+            subTaskSection(title: "未実施", model.childTaskId, status: .notImplemented, shouldAddButton: true)
+            subTaskSection(title: "実施中", model.childTaskId, status: .inProcess)
+            subTaskSection(title: "保留", model.childTaskId, status: .pending)
+            subTaskSection(title: "完了", model.childTaskId, status: .done)
         }
         .navigationTitle("Task詳細")
         .toolbar {
@@ -141,7 +123,29 @@ struct TaskDetailScreen: View {
         }
     }
     
-    private func taskSection(title: String, _ taskModel: [String], status: TaskStatus, shouldAddButton: Bool = false) -> some View {
+    
+    private var dateSection: some View {
+        Section(content: {
+            VStack {
+                HStack {
+                    Text("開始日時: ")
+                    Spacer()
+                    Text(model.startDate ?? "")
+                }
+                Divider()
+                HStack {
+                    Text("期日: ")
+                    Spacer()
+                    Text(model.deadline ?? "")
+                }
+            }
+        }, header: {
+            Text("日時")
+        })
+        
+    }
+    
+    private func subTaskSection(title: String, _ taskModel: [String], status: TaskStatus, shouldAddButton: Bool = false) -> some View {
         let dispModel = subTasks.filter({
             $0.status == status.rawValue
         })
@@ -151,15 +155,7 @@ struct TaskDetailScreen: View {
                     GridRow {
                         ForEach(dispModel, id: \.id) { child in
                             NavigationLink(value: child) {
-                                
-                                RoundedRectangle(cornerRadius: 5)
-                                    .stroke(lineWidth: 1)
-                                    .foregroundStyle(.secondary)
-                                    .background(Color.clear)
-                                    .frame(width: 100, height: 50)
-                                    .overlay  {
-                                        Text(child.title)
-                                    }
+                                SubTaskRow(subTask: child)
                             }
                         }
                     }

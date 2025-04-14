@@ -33,49 +33,47 @@ struct EditTaskScreen: View {
         NavigationStack {
             List {
                 Section(content: {
-                    TextField("タイトルを入力してください", text: $model.title)
+                    TextField(R.string.message.inputTitle(), text: $model.title)
                 }, header: {
-                    Text("タイトル")
+                    Text(R.string.label.title())
                 })
                 
                 Section(content: {
-                    TextField("タイトルを入力してください", text: $model.detail)
+                    TextField(R.string.message.inputDetail(), text: $model.detail)
                 }, header: {
-                    Text("詳細")
+                    Text(R.string.label.detail())
                 })
                 
                 Section(content: {
-                    Toggle("開始日時をセットする", isOn: $isSetStartDate)
+                    Toggle(R.string.message.isSetStartDate(), isOn: $isSetStartDate)
                     
                     if isSetStartDate {
-                        DatePicker("開始日時を選択してください", selection: $model.noSaveStartDate)
+                        DatePicker(R.string.message.inputStartDate(), selection: $model.noSaveStartDate)
                     }
                     
-                    Toggle("期日をセットする", isOn: $isSetEndDate)
+                    Toggle(R.string.message.isSetDeadline(), isOn: $isSetEndDate)
                     
                     if isSetEndDate {
-                        DatePicker("期日を選択してください", selection: $model.noSaveDeadline)
+                        DatePicker(R.string.message.inputDeadline(), selection: $model.noSaveDeadline)
                     }
                     
                 }, header: {
-                    Text("日時")
+                    Text(R.string.label.date())
                 })
                 
                 
                 Section(content: {
-                    Picker("優先順位", selection: $model.priority) {
+                    Picker(R.string.label.priority(), selection: $model.priority) {
                         ForEach(Prioritys.allCases) {
                             Text($0.title)
                                 .tag($0)
                         }
                     }
-                }, header: {
-                    Text("日時")
                 })
                 
                 
             }
-            .navigationTitle("編集")
+            .navigationTitle(R.string.screenTitle.editTaskScreen())
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     CloseButton(action: {
@@ -88,7 +86,7 @@ struct EditTaskScreen: View {
                     Button(action: {
                         updateTask()
                     }, label: {
-                        Text("Done")
+                        Text(R.string.button.done())
                     })
                 }
             }
@@ -96,7 +94,7 @@ struct EditTaskScreen: View {
                 Button(role: .cancel, action: {
                     isValidation.toggle()
                 }, label: {
-                    Text("閉じる")
+                    Text(R.string.button.close())
                 })
             })
         }

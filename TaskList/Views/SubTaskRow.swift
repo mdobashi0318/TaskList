@@ -6,10 +6,13 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct SubTaskRow: View {
     
-    var subTask: SubTask
+    @Bindable var subTask: SubTask
+    
+    @Environment(\.modelContext) var modelContext
     
     private let cornerRadius: CGFloat = 6
     
@@ -34,7 +37,20 @@ struct SubTaskRow: View {
                         .accessibility(identifier: "titlelabel")
                         .frame(alignment: .center)
                     Spacer()
+                    
+                    Picker(R.string.label.status(), selection: $subTask.status) {
+                        ForEach(TaskStatus.allCases) {
+                            Text($0.title)
+                                .tag($0)
+                        }
+                    }
+                    .tint(Color.textColor)
+                    .background(Color.systemBackground)
+                    .padding(.bottom, 5)
                 }
             })
+            .task(id: subTask.status) {
+                try? modelContext.save()
+            }
     }
 }

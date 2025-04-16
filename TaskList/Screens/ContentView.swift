@@ -21,10 +21,7 @@ struct ContentView: View {
             List {
                 ForEach(taskList) { model in
                     NavigationLink(value: model) {
-                        VStack {
-                            Text(model.title)
-                            Text("\(model.childTaskId.count) 個")
-                        }
+                        TaskRow(model: model)
                     }
                 }
             }

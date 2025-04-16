@@ -53,6 +53,15 @@ struct TaskDetailScreen: View {
             
             dateSection
             
+            Section {
+                Picker(R.string.label.status(), selection: $model.status) {
+                    ForEach(TaskStatus.allCases) {
+                        Text($0.title)
+                            .tag($0.rawValue)
+                    }
+                }
+            }
+            
             if model.priority != Prioritys.none.rawValue {
                 Section(content: {
                     Text(Prioritys(rawValue: model.priority)?.title ?? Prioritys.none.title)
@@ -120,6 +129,9 @@ struct TaskDetailScreen: View {
         }
         .fullScreenCover(isPresented: $isShowAddSubTaskSheet) {
             AddSubTaskScreen(taskModel: model)
+        }
+        .task(id: model.status) {
+            try? modelContext.save()
         }
     }
     

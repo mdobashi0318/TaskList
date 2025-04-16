@@ -26,7 +26,10 @@ struct TaskRow: View {
     
     var body: some View {
         HStack() {
-            Text(model.title)
+            VStack(alignment: .leading) {
+                Text(model.title)
+                Text("ステータス: \(TaskStatus(rawValue: model.status)?.title ?? "")")
+            }
             Spacer()
             VStack {
                 ForEach(TaskStatus.allCases) { status in

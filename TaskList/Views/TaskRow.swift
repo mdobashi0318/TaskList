@@ -26,6 +26,10 @@ struct TaskRow: View {
     
     var body: some View {
         HStack() {
+            RoundedRectangle(cornerRadius: 6)
+                .foregroundStyle(TaskStatus(rawValue: model.status)?.color ?? .clear)
+                .frame(width: 8)
+                .padding([.leading, .top, .bottom], 3)
             VStack(alignment: .leading) {
                 Text(model.title)
                 Text("ステータス: \(TaskStatus(rawValue: model.status)?.title ?? "")")

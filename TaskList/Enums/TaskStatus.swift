@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 enum TaskStatus: String, CaseIterable, Identifiable {
     /// 未実施
@@ -33,4 +34,18 @@ enum TaskStatus: String, CaseIterable, Identifiable {
             "保留"
         }
     }
+    
+    var color: Color {
+        switch self {
+        case .notImplemented:
+                .clear
+        case .inProcess:
+                .green
+        case .done:
+                .gray
+        case .pending:
+                .yellow
+        }
+    }
+    
 }

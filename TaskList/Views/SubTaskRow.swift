@@ -28,7 +28,7 @@ struct SubTaskRow: View {
             .shadow(color: .secondary.opacity(0.2), radius: cornerRadius)
             .overlay(content: {
                 VStack(alignment: .center) {
-                    UnevenRoundedRectangle(bottomTrailingRadius: cornerRadius, topTrailingRadius: cornerRadius, style: .continuous)
+                    UnevenRoundedRectangle(topLeadingRadius: cornerRadius, topTrailingRadius: cornerRadius, style: .continuous)
                         .foregroundStyle(Prioritys(rawValue: subTask.priority)?.color ?? .clear)
                         .frame(height: 5)
                         .padding([.leading, .trailing, .top], 3)

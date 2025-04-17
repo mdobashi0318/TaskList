@@ -27,7 +27,7 @@ struct TaskRow: View {
     var body: some View {
         HStack() {
             RoundedRectangle(cornerRadius: 6)
-                .foregroundStyle(TaskStatus(rawValue: model.status)?.color ?? .clear)
+                .foregroundStyle(Prioritys(rawValue: model.priority)?.color ?? .clear)
                 .frame(width: 8)
                 .padding([.leading, .top, .bottom], 3)
             VStack(alignment: .leading) {

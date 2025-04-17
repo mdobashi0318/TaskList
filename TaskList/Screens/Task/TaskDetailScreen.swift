@@ -36,7 +36,7 @@ struct TaskDetailScreen: View {
             subTask.parentTaskId == modelId
         })
     }
-        
+    
     var body: some View {
         List {
             Section(content: {
@@ -52,24 +52,7 @@ struct TaskDetailScreen: View {
             })
             
             dateSection
-            
-            Section {
-                Picker(R.string.label.status(), selection: $model.status) {
-                    ForEach(TaskStatus.allCases) {
-                        Text($0.title)
-                            .tag($0.rawValue)
-                    }
-                }
-            }
-            
-            if model.priority != Prioritys.none.rawValue {
-                Section(content: {
-                    Text(Prioritys(rawValue: model.priority)?.title ?? Prioritys.none.title)
-                }, header: {
-                    Text("優先順位")
-                })
-            }
-            
+            pickerSection
             
             subTaskSection(title: "未実施", model.childTaskId, status: .notImplemented, shouldAddButton: true)
             subTaskSection(title: "実施中", model.childTaskId, status: .inProcess)
@@ -154,7 +137,24 @@ struct TaskDetailScreen: View {
         }, header: {
             Text("日時")
         })
-        
+    }
+    
+    private var pickerSection: some View {
+        Section {
+            Picker(R.string.label.status(), selection: $model.status) {
+                ForEach(TaskStatus.allCases) {
+                    Text($0.title)
+                        .tag($0.rawValue)
+                }
+            }
+            
+            Picker(R.string.label.priority(), selection: $model.priority) {
+                ForEach(Prioritys.allCases) {
+                    Text($0.title)
+                        .tag($0.rawValue)
+                }
+            }
+        }
     }
     
     private func subTaskSection(title: String, _ taskModel: [String], status: TaskStatus, shouldAddButton: Bool = false) -> some View {

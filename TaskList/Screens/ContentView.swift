@@ -10,20 +10,24 @@ import SwiftData
 
 struct ContentView: View {
     
-    @Environment(\.modelContext) var modelContext
+    @Environment(\.modelContext) private var modelContext
     
-    @Query var taskList: [TaskModel]
+    @State private var addTaskViewFlg: Bool = false
     
-    @State var addTaskViewFlg: Bool = false
+    @AppStorage(UserDefaults.Key.selectStatus.rawValue) private var selectStatus: String = ""
     
     var body: some View {
         NavigationStack {
             List {
-                ForEach(taskList) { model in
-                    NavigationLink(value: model) {
-                        TaskRow(model: model)
+                Picker("ステータス", selection: $selectStatus) {
+                    Text("")
+                        .tag("")
+                    ForEach(TaskStatus.allCases) {
+                        Text($0.title)
+                            .tag($0.rawValue)
                     }
                 }
+                TaskListView(selectStatus: selectStatus)
             }
             .navigationTitle("TaskList")
             .navigationDestination(for: TaskModel.self) {

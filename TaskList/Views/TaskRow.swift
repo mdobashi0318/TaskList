@@ -35,14 +35,17 @@ struct TaskRow: View {
                 Text("ステータス: \(TaskStatus(rawValue: model.status)?.title ?? "")")
             }
             Spacer()
-            VStack {
-                ForEach(TaskStatus.allCases) { status in
-                    HStack {
-                        Spacer()
-                        Text(status.title)
-                        Text(": \(subTasks.count(where: { $0.status == status.rawValue}))")
+            if !model.childTaskId.isEmpty {
+                VStack(alignment: .trailing) {
+                    Text("サブタスク")
+                    ForEach(TaskStatus.allCases) { status in
+                        HStack {
+                            Spacer()
+                            Text(status.title)
+                            Text(": \(subTasks.count(where: { $0.status == status.rawValue}))")
+                        }
+                        
                     }
-                    
                 }
             }
         }

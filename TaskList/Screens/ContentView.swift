@@ -19,7 +19,7 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             List {
-                Picker("ステータス", selection: $selectStatus) {
+                Picker(R.string.label.status(), selection: $selectStatus) {
                     Text("")
                         .tag("")
                     ForEach(TaskStatus.allCases) {
@@ -35,10 +35,8 @@ struct ContentView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button(action: {
+                    AddButton(action: {
                         addTaskViewFlg.toggle()
-                    }, label: {
-                        Image(systemName: "plus")
                     })
                 }
             }

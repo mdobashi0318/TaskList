@@ -23,6 +23,8 @@ struct SubTaskDetailScreen: View {
     
     @Bindable var subTask: SubTask
     
+    @Bindable var model: TaskModel
+    
     @State private var backConfirmAlert: Bool = false
     
 
@@ -94,6 +96,15 @@ struct SubTaskDetailScreen: View {
                     Image(systemName: "chevron.backward")
                 }
             }
+            
+            ToolbarItem(placement: .topBarTrailing) {
+                Button(action: {
+                    delete()
+                }) {
+                    Image(systemName: "trash")
+                }
+            }
+            
         }
         .alert("変更されている箇所があります、保存して離れますか？", isPresented: $backConfirmAlert, actions: {
             saveButton
@@ -137,6 +148,19 @@ struct SubTaskDetailScreen: View {
         }, label: {
             Text("変更箇所を戻して、前画面に戻る")
         })
-
     }
+    
+    private func delete() {
+        do {
+            model.childTaskId.removeAll(where: { $0 == subTask.id })
+            modelContext.delete(subTask)
+            try modelContext.save()
+            dismiss()
+        } catch {
+            modelContext.rollback()
+            validationMessage = "削除に失敗しました"
+            isValidation = true
+        }
+    }
+    
 }

@@ -21,15 +21,14 @@ struct TaskListView: View {
             } else {
                 model.status.localizedStandardContains(selectStatus)
             }
-        })
-    }
+        }, sort: [SortDescriptor(\TaskModel.priority, order: .reverse), SortDescriptor(\TaskModel.status)])}
     
     
     var body: some View {
-            ForEach(taskList) { model in
-                NavigationLink(value: model) {
-                    TaskRow(model: model)
-                }
+        ForEach(taskList) { model in
+            NavigationLink(value: model) {
+                TaskRow(model: model)
             }
         }
+    }
 }

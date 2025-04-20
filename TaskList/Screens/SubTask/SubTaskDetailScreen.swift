@@ -27,62 +27,56 @@ struct SubTaskDetailScreen: View {
     
     @State private var backConfirmAlert: Bool = false
     
-
+    
     var body: some View {
         List {
             Section(content: {
-                TextField("タイトルを入力してください", text: $subTask.title)
+                TextField(R.string.message.inputTitle(), text: $subTask.title)
             }, header: {
-                Text("タイトル")
+                Text(R.string.label.title())
             })
             
             Section(content: {
-                TextField("詳細を入力してください", text: $subTask.detail)
+                TextField(R.string.message.inputDetail(), text: $subTask.detail)
             }, header: {
-                Text("詳細")
+                Text(R.string.label.detail())
             })
             
             Section(content: {
-                Toggle("開始日時をセットする", isOn: $isSetStartDate)
+                Toggle(R.string.message.isSetStartDate(), isOn: $isSetStartDate)
                 
                 if isSetStartDate {
-                    DatePicker("開始日時を選択してください", selection: $subTask.noSaveStartDate)
+                    DatePicker(R.string.message.inputStartDate(), selection: $subTask.noSaveStartDate)
                 }
                 
-                Toggle("期日をセットする", isOn: $isSetEndDate)
+                Toggle(R.string.message.isSetDeadline(), isOn: $isSetEndDate)
                 
                 if isSetEndDate {
-                    DatePicker("期日を選択してください", selection: $subTask.noSaveDeadline)
+                    DatePicker(R.string.message.inputDeadline(), selection: $subTask.noSaveDeadline)
                 }
                 
             }, header: {
-                Text("日時")
+                Text(R.string.label.date())
             })
             
             
             Section(content: {
-                Picker("優先順位", selection: $subTask.priority) {
+                Picker(R.string.label.priority(), selection: $subTask.priority) {
                     ForEach(Prioritys.allCases) {
                         Text($0.title)
                             .tag($0)
                     }
                 }
-            }, header: {
-                Text("日時")
-            })
-            
-            Section(content: {
-                Picker("ステータス", selection: $subTask.status) {
+                
+                Picker(R.string.label.status(), selection: $subTask.status) {
                     ForEach(TaskStatus.allCases) {
                         Text($0.title)
                             .tag($0)
                     }
                 }
-            }, header: {
-                Text("日時")
             })
         }
-        .navigationTitle("サブタスク詳細")
+        .navigationTitle("サブタスク")
         .navigationBarBackButtonHidden()
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
@@ -119,6 +113,25 @@ struct SubTaskDetailScreen: View {
         .task(id: subTask) {
             isSetStartDate = subTask.startDate != nil
             isSetEndDate = subTask.deadline != nil
+        }
+        .task(id: isSetStartDate) {
+            if isSetStartDate {
+                if subTask.startDate == nil {
+                    subTask.startDate = DateFormatter.format_yyyyMMddHHmm()
+                }
+            } else {
+                subTask.startDate = nil
+            }
+        }
+        .task(id: isSetEndDate) {
+            if isSetEndDate {
+                if subTask.deadline == nil {
+                    subTask.deadline = DateFormatter.format_yyyyMMddHHmm()
+                }
+            } else {
+                subTask.deadline = nil
+            }
+            
         }
     }
     

@@ -42,22 +42,22 @@ struct TaskDetailScreen: View {
             Section(content: {
                 Text(model.title)
             }, header: {
-                Text("タイトル")
+                Text(R.string.label.title())
             })
             
             Section(content: {
                 Text(model.detail)
             }, header: {
-                Text("詳細")
+                Text(R.string.label.detail())
             })
             
             dateSection
             pickerSection
             
-            subTaskSection(title: "未実施", model.childTaskId, status: .notImplemented, shouldAddButton: true)
-            subTaskSection(title: "実施中", model.childTaskId, status: .inProcess)
-            subTaskSection(title: "保留", model.childTaskId, status: .pending)
-            subTaskSection(title: "完了", model.childTaskId, status: .done)
+            subTaskSection(model.childTaskId, status: .notImplemented, shouldAddButton: true)
+            subTaskSection(model.childTaskId, status: .inProcess)
+            subTaskSection(model.childTaskId, status: .pending)
+            subTaskSection(model.childTaskId, status: .done)
         }
         .navigationTitle("Task詳細")
         .toolbar {
@@ -84,7 +84,7 @@ struct TaskDetailScreen: View {
             Button(role: .cancel, action: {
                 isShowAlert.toggle()
             }, label: {
-                Text("閉じる")
+                Text(R.string.button.close())
             })
         })
         .confirmationDialog("このタスクをどうしますか？", isPresented: $isConfirmationDialog, actions: {
@@ -135,7 +135,7 @@ struct TaskDetailScreen: View {
                 }
             }
         }, header: {
-            Text("日時")
+            Text(R.string.label.date())
         })
     }
     
@@ -157,7 +157,7 @@ struct TaskDetailScreen: View {
         }
     }
     
-    private func subTaskSection(title: String, _ taskModel: [String], status: TaskStatus, shouldAddButton: Bool = false) -> some View {
+    private func subTaskSection(_ taskModel: [String], status: TaskStatus, shouldAddButton: Bool = false) -> some View {
         let dispModel = subTasks.filter({
             $0.status == status.rawValue
         })
@@ -175,7 +175,7 @@ struct TaskDetailScreen: View {
             }
         }, header: {
             HStack {
-                Text(title)
+                Text(status.title)
                 if shouldAddButton {
                     Spacer()
                     AddButton(action: {

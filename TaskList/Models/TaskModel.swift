@@ -88,8 +88,22 @@ class TaskModel {
     
     
     func update(tag: String? = nil, isSetStartDate: Bool, isSetEndDate: Bool) {
-        if !isSetStartDate { startDate = nil }
-        if !isSetEndDate { deadline = nil }
+        if isSetStartDate {
+            if startDate == nil {
+                startDate = DateFormatter.format_yyyyMMddHHmm()
+            }
+        } else {
+            startDate = nil
+        }
+        
+        if isSetEndDate {
+            if deadline == nil {
+                deadline = DateFormatter.format_yyyyMMddHHmm()
+            }
+        } else {
+            deadline = nil
+        }
+        
         self.tag = tag
         self.updated_at = DateFormatter.created_at
     }

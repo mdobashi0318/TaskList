@@ -102,17 +102,12 @@ struct EditTaskScreen: View {
     
     
     private func updateTask() {
-        guard modelContext.hasChanges else {
-            dismiss()
-            return
-        }
-        
         if model.title.isEmpty {
-            validationMessage = "タイトルを入力してください。"
+            validationMessage = R.string.message.inputTitle()
             isValidation = true
             return
         } else if model.detail.isEmpty {
-            validationMessage = "詳細を入力してください"
+            validationMessage = R.string.message.inputDetail()
             isValidation = true
             return
         }
@@ -122,7 +117,7 @@ struct EditTaskScreen: View {
             try modelContext.save()
             dismiss()
         } catch {
-            validationMessage = "追加に失敗しました"
+            validationMessage = "更新に失敗しました"
             isValidation = true
         }
         

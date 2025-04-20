@@ -116,6 +116,9 @@ struct TaskDetailScreen: View {
         .task(id: model.status) {
             try? modelContext.save()
         }
+        .task(id: model.priority) {
+            try? modelContext.save()
+        }
     }
     
     

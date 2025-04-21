@@ -172,7 +172,6 @@ struct SubTaskDetailScreen: View {
     
     private func delete() {
         do {
-            model.childTaskId.removeAll(where: { $0 == subTask.id })
             modelContext.delete(subTask)
             try modelContext.save()
             dismiss()

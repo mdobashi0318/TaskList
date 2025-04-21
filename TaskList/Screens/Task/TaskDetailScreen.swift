@@ -14,7 +14,7 @@ struct TaskDetailScreen: View {
     
     @Environment(\.modelContext) var modelContext
     
-    @Bindable private var model: TaskModel
+    @Bindable var model: TaskModel
     
     @State private var isShowAlert: Bool = false
     @State private var alertMessage = ""
@@ -26,17 +26,7 @@ struct TaskDetailScreen: View {
     @State private var isShowEditSheet: Bool = false
     
     @State private var isShowAddSubTaskSheet: Bool = false
-    
-    @Query private var subTasks: [SubTask]
-    
-    init(model: TaskModel) {
-        self.model = model
-        let modelId = model.id
-        _subTasks = Query(filter: #Predicate<SubTask> { subTask in
-            subTask.parentTaskId == modelId
-        })
-    }
-    
+        
     var body: some View {
         List {
             Section(content: {
@@ -54,10 +44,10 @@ struct TaskDetailScreen: View {
             dateSection
             pickerSection
             
-            subTaskSection(model.childTaskId, status: .notImplemented, shouldAddButton: true)
-            subTaskSection(model.childTaskId, status: .inProcess)
-            subTaskSection(model.childTaskId, status: .pending)
-            subTaskSection(model.childTaskId, status: .done)
+            subTaskSection(model.childTask, status: .notImplemented, shouldAddButton: true)
+            subTaskSection(model.childTask, status: .inProcess)
+            subTaskSection(model.childTask, status: .pending)
+            subTaskSection(model.childTask, status: .done)
         }
         .navigationTitle("Task詳細")
         .toolbar {
@@ -160,8 +150,8 @@ struct TaskDetailScreen: View {
         }
     }
     
-    private func subTaskSection(_ taskModel: [String], status: TaskStatus, shouldAddButton: Bool = false) -> some View {
-        let dispModel = subTasks.filter({
+    private func subTaskSection(_ taskModel: [SubTask], status: TaskStatus, shouldAddButton: Bool = false) -> some View {
+        let dispModel = model.childTask.filter({
             $0.status == status.rawValue
         })
         return Section(content: {

@@ -17,7 +17,8 @@ class TaskModel {
     /// 詳細
     var detail: String = ""
     /// 小タスク
-    var childTaskId: [String] = []
+    @Relationship(deleteRule: .cascade, inverse: \SubTask.parentTask)
+    var childTask: [SubTask] = []
     /// 開始日
     var startDate: String?
     /// 期限
@@ -55,11 +56,11 @@ class TaskModel {
     
     init() {}
     
-    init(id: String, title: String, detail: String, childTaskId: [String], startDate: String? = nil, deadline: String? = nil, priority: String, status: String, tag: String? = nil, created_at: String, updated_at: String) {
+    init(id: String, title: String, detail: String, childTask: [SubTask], startDate: String? = nil, deadline: String? = nil, priority: String, status: String, tag: String? = nil, created_at: String, updated_at: String) {
         self.id = id
         self.title = title
         self.detail = detail
-        self.childTaskId = childTaskId
+        self.childTask = childTask
         self.startDate = startDate
         self.deadline = deadline
         self.priority = priority
@@ -76,7 +77,7 @@ class TaskModel {
         self.id = UUID().uuidString
         self.title = title
         self.detail = detail
-        self.childTaskId = []
+        self.childTask = []
         self.startDate = startDate
         self.deadline = deadline
         self.priority = priority

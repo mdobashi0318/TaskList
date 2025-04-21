@@ -18,7 +18,7 @@ class SubTask {
     /// 詳細
     var detail: String = ""
     /// 親タスク
-    var parentTaskId: String = ""
+    var parentTask: TaskModel?
     /// 開始日
     var startDate: String?
     /// 期限
@@ -57,22 +57,22 @@ class SubTask {
     
     init() { }
     
-    init(id: String, title: String, detail: String, parentTaskId: String, startDate: String? = nil, status: String) {
+    init(id: String, title: String, detail: String, parentTask: TaskModel, startDate: String? = nil, status: String) {
         self.id = id
         self.title = title
         self.detail = detail
-        self.parentTaskId = parentTaskId
+        self.parentTask = parentTask
         self.startDate = startDate
         self.status = status
     }
     
-    func add(title: String, detail: String, parentTaskId: String, startDate: String?, deadline: String?, priority: String, tag: String? = nil) {
+    func add(title: String, detail: String, parentTask: TaskModel, startDate: String?, deadline: String?, priority: String, tag: String? = nil) {
         let created_at = DateFormatter.created_at
         
         self.id = UUID().uuidString
         self.title = title
         self.detail = detail
-        self.parentTaskId = parentTaskId
+        self.parentTask = parentTask
         self.startDate = startDate
         self.deadline = deadline
         self.priority = priority

@@ -12,17 +12,7 @@ struct TaskRow: View {
     
     @Environment(\.modelContext) private var modelContext
     
-    private let model: TaskModel
-    
-    @Query private var subTasks: [SubTask]
-    
-    init(model: TaskModel) {
-        self.model = model
-        let modelId = model.id
-        _subTasks = Query(filter: #Predicate<SubTask> { subTask in
-            subTask.parentTaskId == modelId
-        })
-    }
+    let model: TaskModel
     
     var body: some View {
         HStack() {
@@ -35,14 +25,14 @@ struct TaskRow: View {
                 Text("ステータス: \(TaskStatus(rawValue: model.status)?.title ?? "")")
             }
             Spacer()
-            if !model.childTaskId.isEmpty {
+            if !model.childTask.isEmpty {
                 VStack(alignment: .trailing) {
                     Text("サブタスク")
                     ForEach(TaskStatus.allCases) { status in
                         HStack {
                             Spacer()
                             Text(status.title)
-                            Text(": \(subTasks.count(where: { $0.status == status.rawValue}))")
+                            Text(": \(model.childTask.count(where: { $0.status == status.rawValue}))")
                         }
                         
                     }

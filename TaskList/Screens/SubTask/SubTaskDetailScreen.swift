@@ -120,7 +120,10 @@ struct SubTaskDetailScreen: View {
                     subTask.startDate = DateFormatter.format_yyyyMMddHHmm()
                 }
             } else {
-                subTask.startDate = nil
+                /// 最初からnilだった時に、変更扱いになってしまうので、nilじゃないときにnilを入れるようにする
+                if subTask.startDate != nil {
+                    subTask.startDate = nil
+                }
             }
         }
         .task(id: isSetEndDate) {
@@ -129,7 +132,10 @@ struct SubTaskDetailScreen: View {
                     subTask.deadline = DateFormatter.format_yyyyMMddHHmm()
                 }
             } else {
-                subTask.deadline = nil
+                /// 最初からnilだった時に、変更扱いになってしまうので、nilじゃないときにnilを入れるようにする
+                if subTask.deadline != nil {
+                    subTask.deadline = nil
+                }
             }
             
         }
@@ -139,6 +145,7 @@ struct SubTaskDetailScreen: View {
     private var saveButton: some View {
         Button(role: .none, action: {
             do {
+                subTask.update(isSetStartDate: isSetStartDate, isSetEndDate: isSetEndDate)
                 try modelContext.save()
                 dismiss()
             } catch {

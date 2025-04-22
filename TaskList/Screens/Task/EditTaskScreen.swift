@@ -39,7 +39,7 @@ struct EditTaskScreen: View {
                 })
                 
                 Section(content: {
-                    TextField(R.string.message.inputDetail(), text: $model.detail)
+                    TextField(R.string.message.inputDetail(), text: $model.detail, axis: .vertical)
                 }, header: {
                     Text(R.string.label.detail())
                 })

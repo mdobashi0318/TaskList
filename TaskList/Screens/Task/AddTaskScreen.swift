@@ -43,7 +43,7 @@ struct AddTaskScreen: View {
                 })
                 
                 Section(content: {
-                    TextField(R.string.message.inputDetail(), text: $detail)
+                    TextField(R.string.message.inputDetail(), text: $detail, axis: .vertical)
                 }, header: {
                     Text(R.string.label.detail())
                 })

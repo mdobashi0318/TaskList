@@ -22,9 +22,7 @@ struct SubTaskDetailScreen: View {
     @State private var validationMessage = "未入力箇所があります。"
     
     @Bindable var subTask: SubTask
-    
-    @Bindable var model: TaskModel
-    
+        
     @State private var backConfirmAlert: Bool = false
     
     

@@ -95,7 +95,7 @@ struct TaskDetailScreen: View {
             })
         })
         .navigationDestination(for: SubTask.self) {
-            SubTaskDetailScreen(subTask: $0, model: model)
+            SubTaskDetailScreen(subTask: $0)
         }
         .fullScreenCover(isPresented: $isShowEditSheet) {
             EditTaskScreen(model: model)

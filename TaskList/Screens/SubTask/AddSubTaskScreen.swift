@@ -120,8 +120,7 @@ struct AddSubTaskScreen: View {
                         parentTask: taskModel,
                         startDate: isSetStartDate ? DateFormatter.format_yyyyMMddHHmm(startDate) : nil,
                         deadline: isSetEndDate ? DateFormatter.format_yyyyMMddHHmm(endDate) : nil,
-                        priority: priority.rawValue,
-                        tag: "")
+                        priority: priority.rawValue)
             
             modelContext.insert(subTask)
             taskModel.childTask.append(subTask)

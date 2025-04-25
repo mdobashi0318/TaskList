@@ -66,7 +66,7 @@ class SubTask {
         self.status = status
     }
     
-    func add(title: String, detail: String, parentTask: TaskModel, startDate: String?, deadline: String?, priority: String, tag: String? = nil) {
+    func add(title: String, detail: String, parentTask: TaskModel, startDate: String?, deadline: String?, priority: String) {
         let created_at = DateFormatter.created_at
         
         self.id = UUID().uuidString

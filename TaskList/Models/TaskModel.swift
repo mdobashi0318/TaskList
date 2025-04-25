@@ -27,8 +27,6 @@ class TaskModel {
     var priority: String = Prioritys.none.rawValue
     /// 状態
     var status: String = TaskStatus.notImplemented.rawValue
-    /// タグ
-    var tag: String?
     
     var created_at: String = ""
     
@@ -56,7 +54,7 @@ class TaskModel {
     
     init() {}
     
-    init(id: String, title: String, detail: String, childTask: [SubTask], startDate: String? = nil, deadline: String? = nil, priority: String, status: String, tag: String? = nil, created_at: String, updated_at: String) {
+    init(id: String, title: String, detail: String, childTask: [SubTask], startDate: String? = nil, deadline: String? = nil, priority: String, status: String, created_at: String, updated_at: String) {
         self.id = id
         self.title = title
         self.detail = detail
@@ -65,13 +63,12 @@ class TaskModel {
         self.deadline = deadline
         self.priority = priority
         self.status = status
-        self.tag = tag
         self.created_at = created_at
         self.updated_at = updated_at
     }
     
     
-    func add(title: String, detail: String, startDate: String?, deadline: String?, priority: String, tag: String? = nil) {
+    func add(title: String, detail: String, startDate: String?, deadline: String?, priority: String) {
         let created_at = DateFormatter.created_at
         
         self.id = UUID().uuidString
@@ -82,13 +79,12 @@ class TaskModel {
         self.deadline = deadline
         self.priority = priority
         self.status = TaskStatus.notImplemented.rawValue
-        self.tag = tag
         self.created_at = created_at
         self.updated_at = created_at
     }
     
     
-    func update(tag: String? = nil, isSetStartDate: Bool, isSetEndDate: Bool) {
+    func update(isSetStartDate: Bool, isSetEndDate: Bool) {
         if isSetStartDate {
             if startDate == nil {
                 startDate = DateFormatter.format_yyyyMMddHHmm()
@@ -105,7 +101,6 @@ class TaskModel {
             deadline = nil
         }
         
-        self.tag = tag
         self.updated_at = DateFormatter.created_at
     }
     

@@ -119,8 +119,7 @@ struct AddTaskScreen: View {
                           detail: detail,
                           startDate: isSetStartDate ? DateFormatter.format_yyyyMMddHHmm(startDate) : nil,
                           deadline: isSetEndDate ? DateFormatter.format_yyyyMMddHHmm(endDate) : nil,
-                          priority: priority.rawValue,
-                          tag: "")
+                          priority: priority.rawValue)
             
             modelContext.insert(taskModel)
             try modelContext.save()

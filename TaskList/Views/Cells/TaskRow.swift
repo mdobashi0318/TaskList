@@ -28,16 +28,24 @@ struct TaskRow: View {
             if !model.childTask.isEmpty {
                 VStack(alignment: .trailing) {
                     Text("サブタスク")
-                    ForEach(TaskStatus.allCases) { status in
-                        HStack {
-                            Spacer()
-                            Text(status.title)
-                            Text(": \(model.childTask.count(where: { $0.status == status.rawValue}))")
-                        }
-                        
-                    }
+                    countLabel
                 }
             }
+        }
+    }
+    
+    private var countLabel: some View {
+        Label("\(model.childTask.count(where: { $0.status == TaskStatus.done.rawValue }))/\(model.childTask.count)", systemImage: checklistImage)
+            .foregroundStyle(Color.textColor)
+    }
+    
+    private var checklistImage: String {
+        if model.childTask.count(where: { $0.status == TaskStatus.done.rawValue }) == model.childTask.count {
+            "checklist.checked"
+        } else if model.childTask.count(where: { $0.status == TaskStatus.done.rawValue }) > 0 {
+            "checklist"
+        } else {
+            "checklist.unchecked"
         }
     }
     

@@ -112,24 +112,41 @@ struct TaskDetailScreen: View {
     }
     
     
+    @ViewBuilder
     private var dateSection: some View {
-        Section(content: {
-            VStack {
-                HStack {
-                    Text("開始日時: ")
-                    Spacer()
-                    Text(model.startDate ?? "")
+        let startDate =  model.startDate ?? ""
+        let deadline = model.deadline ?? ""
+        
+        if startDate.isEmpty && deadline.isEmpty {
+            EmptyView()
+        } else {
+            Section(content: {
+                VStack {
+                    if !startDate.isEmpty {
+                        HStack {
+                            Text("開始日時: ")
+                            Spacer()
+                            Text(startDate)
+                        }
+                        if !deadline.isEmpty {
+                            Divider()
+                        }
+                        
+                    }
+                    
+                    if !deadline.isEmpty {
+                        HStack {
+                            Text("期日: ")
+                            Spacer()
+                            Text(deadline)
+                        }
+                    }
                 }
-                Divider()
-                HStack {
-                    Text("期日: ")
-                    Spacer()
-                    Text(model.deadline ?? "")
-                }
-            }
-        }, header: {
-            Text(R.string.label.date())
-        })
+            }, header: {
+                Text(R.string.label.date())
+            })
+            
+        }
     }
     
     private var pickerSection: some View {
@@ -168,7 +185,7 @@ struct TaskDetailScreen: View {
             }
         }, header: {
             HStack {
-                Text(status.title)
+                Text("\(status.title)(\(dispModel.count))")
                 if shouldAddButton {
                     Spacer()
                     AddButton(action: {

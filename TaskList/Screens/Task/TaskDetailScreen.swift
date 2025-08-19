@@ -91,8 +91,9 @@ struct TaskDetailScreen: View {
                 Text("キャンセル")
             })
         })
-        .navigationDestination(for: SubTask.self) {
-            SubTaskDetailScreen(subTask: $0)
+        .navigationDestination(for: SubTask.self) { subTask in
+            SubTaskDetailScreen(subTask: subTask)
+                .onChange(of: subTask.status, initial: false, { onChangeSubTaskStatus(subTask) })
         }
         .fullScreenCover(isPresented: $isShowEditSheet) {
             EditTaskScreen(model: model)
@@ -174,6 +175,7 @@ struct TaskDetailScreen: View {
                     ForEach(dispModel, id: \.id) { child in
                         NavigationLink(value: child) {
                             SubTaskRow(subTask: child)
+                                .onChange(of: child.status, initial: false, { onChangeSubTaskStatus(child) })
                         }
                     }
                 }
@@ -243,5 +245,11 @@ struct TaskDetailScreen: View {
             print("削除に失敗しました。 error: \(error)")
         }
         
+    }
+    
+    private func onChangeSubTaskStatus(_ subTask: SubTask) {
+        if subTask.status == TaskStatus.inProcess.rawValue {
+            model.status = TaskStatus.inProcess.rawValue
+        }
     }
 }

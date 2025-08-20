@@ -22,7 +22,11 @@ struct TaskRow: View {
                 .padding([.leading, .top, .bottom], 3)
             VStack(alignment: .leading) {
                 Text(model.title)
-                Text("ステータス: \(TaskStatus(rawValue: model.status)?.title ?? "")")
+                HStack {
+                    Text("ステータス: ")
+                    Text("\(TaskStatus(rawValue: model.status)?.title ?? "")")
+                        .foregroundStyle(TaskStatus(rawValue: model.status)?.color ?? .textColor)
+                }
             }
             Spacer()
             if !model.childTask.isEmpty {

@@ -41,6 +41,7 @@ struct TaskRow: View {
     private var countLabel: some View {
         Label("\(model.childTask.count(where: { $0.status == TaskStatus.done.rawValue }))/\(model.childTask.count)", systemImage: checklistImage)
             .foregroundStyle(Color.textColor)
+            .labelStyle(.titleAndIcon)
     }
     
     private var checklistImage: String {

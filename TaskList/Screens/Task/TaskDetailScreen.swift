@@ -118,26 +118,19 @@ struct TaskDetailScreen: View {
         if startDate.isEmpty && deadline.isEmpty {
             EmptyView()
         } else {
-            
-            VStack {
-                if !startDate.isEmpty {
-                    HStack {
-                        Text("開始日時")
-                        Spacer()
-                        Text(startDate)
-                    }
-                    if !deadline.isEmpty {
-                        Divider()
-                    }
-                    
+            if !startDate.isEmpty {
+                HStack {
+                    Text("開始日時")
+                    Spacer()
+                    Text(startDate)
                 }
-                
-                if !deadline.isEmpty {
-                    HStack {
-                        Text("期日")
-                        Spacer()
-                        Text(deadline)
-                    }
+            }
+            
+            if !deadline.isEmpty {
+                HStack {
+                    Text("期日")
+                    Spacer()
+                    Text(deadline)
                 }
             }
         }

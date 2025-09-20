@@ -9,7 +9,10 @@ import Foundation
 
 extension DateFormatter {
     
-    static let created_at = format_yyyyMMddHHmmSSSS()
+    static var created_at: String {
+        format_yyyyMMddHHmmSSSS()
+    }
+
     
     
     // 現在日時をの文字列をyyy/MM/dd HH:mm:SSSS形式で返す

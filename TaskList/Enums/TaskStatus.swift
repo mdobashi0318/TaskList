@@ -38,7 +38,7 @@ enum TaskStatus: String, CaseIterable, Identifiable {
     var color: Color {
         switch self {
         case .notImplemented:
-                .clear
+                .textColor
         case .inProcess:
                 .green
         case .done:

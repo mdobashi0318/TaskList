@@ -22,22 +22,35 @@ struct TaskRow: View {
                 .padding([.leading, .top, .bottom], 3)
             VStack(alignment: .leading) {
                 Text(model.title)
-                Text("ステータス: \(TaskStatus(rawValue: model.status)?.title ?? "")")
+                HStack {
+                    Text("ステータス: ")
+                    Text("\(TaskStatus(rawValue: model.status)?.title ?? "")")
+                        .foregroundStyle(TaskStatus(rawValue: model.status)?.color ?? .textColor)
+                }
             }
             Spacer()
             if !model.childTask.isEmpty {
                 VStack(alignment: .trailing) {
                     Text("サブタスク")
-                    ForEach(TaskStatus.allCases) { status in
-                        HStack {
-                            Spacer()
-                            Text(status.title)
-                            Text(": \(model.childTask.count(where: { $0.status == status.rawValue}))")
-                        }
-                        
-                    }
+                    countLabel
                 }
             }
+        }
+    }
+    
+    private var countLabel: some View {
+        Label("\(model.childTask.count(where: { $0.status == TaskStatus.done.rawValue }))/\(model.childTask.count)", systemImage: checklistImage)
+            .foregroundStyle(Color.textColor)
+            .labelStyle(.titleAndIcon)
+    }
+    
+    private var checklistImage: String {
+        if model.childTask.count(where: { $0.status == TaskStatus.done.rawValue }) == model.childTask.count {
+            "checklist.checked"
+        } else if model.childTask.count(where: { $0.status == TaskStatus.done.rawValue }) > 0 {
+            "checklist"
+        } else {
+            "checklist.unchecked"
         }
     }
     

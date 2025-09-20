@@ -26,28 +26,25 @@ struct TaskDetailScreen: View {
     @State private var isShowEditSheet: Bool = false
     
     @State private var isShowAddSubTaskSheet: Bool = false
-        
+    
+    @State private var isShowSubTask: Bool = false
+    
     var body: some View {
         List {
-            Section(content: {
-                Text(model.title)
-            }, header: {
+            HStack {
                 Text(R.string.label.title())
-            })
+                Spacer()
+                Text(model.title)
+            }
             
-            Section(content: {
-                Text(model.detail)
-            }, header: {
+            HStack {
                 Text(R.string.label.detail())
-            })
-            
-            dateSection
+                Spacer()
+                Text(model.detail)
+            }
+            dateRow
             pickerSection
-            
-            subTaskSection(model.childTask, status: .notImplemented, shouldAddButton: true)
-            subTaskSection(model.childTask, status: .inProcess)
-            subTaskSection(model.childTask, status: .pending)
-            subTaskSection(model.childTask, status: .done)
+            subTaskSection
         }
         .navigationTitle("Task詳細")
         .toolbar {
@@ -94,8 +91,9 @@ struct TaskDetailScreen: View {
                 Text("キャンセル")
             })
         })
-        .navigationDestination(for: SubTask.self) {
-            SubTaskDetailScreen(subTask: $0)
+        .navigationDestination(for: SubTask.self) { subTask in
+            SubTaskDetailScreen(subTask: subTask)
+                .onChange(of: subTask.status, initial: false, { onChangeSubTaskStatus(subTask) })
         }
         .fullScreenCover(isPresented: $isShowEditSheet) {
             EditTaskScreen(model: model)
@@ -112,24 +110,30 @@ struct TaskDetailScreen: View {
     }
     
     
-    private var dateSection: some View {
-        Section(content: {
-            VStack {
+    @ViewBuilder
+    private var dateRow: some View {
+        let startDate =  model.startDate ?? ""
+        let deadline = model.deadline ?? ""
+        
+        if startDate.isEmpty && deadline.isEmpty {
+            EmptyView()
+        } else {
+            if !startDate.isEmpty {
                 HStack {
-                    Text("開始日時: ")
+                    Text("開始日時")
                     Spacer()
-                    Text(model.startDate ?? "")
-                }
-                Divider()
-                HStack {
-                    Text("期日: ")
-                    Spacer()
-                    Text(model.deadline ?? "")
+                    Text(startDate)
                 }
             }
-        }, header: {
-            Text(R.string.label.date())
-        })
+            
+            if !deadline.isEmpty {
+                HStack {
+                    Text("期日")
+                    Spacer()
+                    Text(deadline)
+                }
+            }
+        }
     }
     
     private var pickerSection: some View {
@@ -150,35 +154,78 @@ struct TaskDetailScreen: View {
         }
     }
     
-    private func subTaskSection(_ taskModel: [SubTask], status: TaskStatus, shouldAddButton: Bool = false) -> some View {
+    @ViewBuilder
+    private func subTaskRow(_ taskModel: [SubTask], status: TaskStatus) -> some View {
         let dispModel = model.childTask.filter({
             $0.status == status.rawValue
         })
-        return Section(content: {
-            ScrollView(.horizontal) {
-                Grid {
-                    GridRow {
-                        ForEach(dispModel, id: \.id) { child in
-                            NavigationLink(value: child) {
-                                SubTaskRow(subTask: child)
-                            }
+        
+        ScrollView(.horizontal) {
+            Grid(alignment: .leading) {
+                Text("\(status.title)(\(dispModel.count))")
+                    .font(.caption)
+                GridRow {
+                    ForEach(dispModel, id: \.id) { child in
+                        NavigationLink(value: child) {
+                            SubTaskRow(subTask: child)
+                                .onChange(of: child.status, initial: false, { onChangeSubTaskStatus(child) })
                         }
                     }
                 }
             }
+        }
+    }
+    
+    @ViewBuilder
+    private var subTaskSection: some View {
+        Section(content: {
+            if isShowSubTask {
+                subTaskRow(model.childTask, status: .notImplemented)
+                subTaskRow(model.childTask, status: .inProcess)
+                subTaskRow(model.childTask, status: .pending)
+                subTaskRow(model.childTask, status: .done)
+            }
         }, header: {
             HStack {
-                Text(status.title)
-                if shouldAddButton {
-                    Spacer()
-                    AddButton(action: {
-                        isShowAddSubTaskSheet.toggle()
-                    })
+                Text("サブタスク")
+                if !isShowSubTask {
+                    subTaskCountHeader
                 }
+                
+                Spacer()
+                AddButton(action: {
+                    isShowAddSubTaskSheet.toggle()
+                })
+                Button(action: {
+                    isShowSubTask.toggle()
+                }, label: {
+                    isShowSubTask ? Image(systemName: "chevron.down") : Image(systemName: "chevron.up")
+                })
             }
+            
         })
     }
     
+    @ViewBuilder
+    private var subTaskCountHeader: some View {
+        if  model.childTask.filter({ $0.status != TaskStatus.done.rawValue }).count > 0 {
+            VStack {
+                subTaskHeaderText(.notImplemented)
+                subTaskHeaderText(.inProcess)
+            }
+            VStack {
+                subTaskHeaderText(.pending)
+                subTaskHeaderText(.done)
+            }
+            
+        } else {
+            Text("0件")
+        }
+    }
+    
+    private func subTaskHeaderText(_ status: TaskStatus) -> some View {
+        Text("\(status.title):\(model.childTask.filter({ $0.status == status.rawValue }).count)")
+    }
     
     private func deleteTask() {
         do {
@@ -191,5 +238,11 @@ struct TaskDetailScreen: View {
             print("削除に失敗しました。 error: \(error)")
         }
         
+    }
+    
+    private func onChangeSubTaskStatus(_ subTask: SubTask) {
+        if subTask.status == TaskStatus.inProcess.rawValue {
+            model.status = TaskStatus.inProcess.rawValue
+        }
     }
 }

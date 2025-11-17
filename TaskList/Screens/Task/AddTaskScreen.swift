@@ -32,6 +32,7 @@ struct AddTaskScreen: View {
     @State private var isValidation = false
     @State private var validationMessage = R.string.message.notYetEntered()
     
+    @AppStorage(UserDefaults.Key.addFirstTask.rawValue) private var addFirstTask: Bool = false
     
     var body: some View {
         NavigationStack {
@@ -123,6 +124,10 @@ struct AddTaskScreen: View {
             
             modelContext.insert(taskModel)
             try modelContext.save()
+            
+            if !addFirstTask {
+                addFirstTask = true
+            }
             dismiss()
         } catch {
             validationMessage = R.string.message.addError()

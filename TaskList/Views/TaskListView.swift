@@ -25,9 +25,13 @@ struct TaskListView: View {
     
     
     var body: some View {
-        ForEach(taskList) { model in
-            NavigationLink(value: model) {
-                TaskRow(model: model)
+        if taskList.isEmpty {
+            Text("NoTaskList")
+        } else {
+            ForEach(taskList) { model in
+                NavigationLink(value: model) {
+                    TaskRow(model: model)
+                }
             }
         }
     }

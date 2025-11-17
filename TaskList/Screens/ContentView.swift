@@ -16,18 +16,17 @@ struct ContentView: View {
     
     @AppStorage(UserDefaults.Key.selectStatus.rawValue) private var selectStatus: String = ""
     
+    @AppStorage(UserDefaults.Key.addFirstTask.rawValue) private var addFirstTask: Bool = false
+    
     var body: some View {
         NavigationStack {
             List {
-                Picker(R.string.label.status(), selection: $selectStatus) {
-                    Text("")
-                        .tag("")
-                    ForEach(TaskStatus.allCases) {
-                        Text($0.title)
-                            .tag($0.rawValue)
-                    }
+                if addFirstTask {
+                    pickerArea
+                    TaskListView(selectStatus: selectStatus)
+                } else {
+                    Text("AddNoTask")
                 }
-                TaskListView(selectStatus: selectStatus)
             }
             .navigationTitle("TaskList")
             .navigationDestination(for: TaskModel.self) {
@@ -45,6 +44,17 @@ struct ContentView: View {
             }
         }
         
+    }
+    
+    private var pickerArea: some View {
+        Picker(R.string.label.status(), selection: $selectStatus) {
+            Text("")
+                .tag("")
+            ForEach(TaskStatus.allCases) {
+                Text($0.title)
+                    .tag($0.rawValue)
+            }
+        }
     }
 }
 

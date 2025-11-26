@@ -107,10 +107,6 @@ struct AddSubTaskScreen: View {
             validationMessage = "タイトルを入力してください。"
             isValidation = true
             return
-        } else if detail.isEmpty {
-            validationMessage = "詳細を入力してください"
-            isValidation = true
-            return
         }
         
         do {

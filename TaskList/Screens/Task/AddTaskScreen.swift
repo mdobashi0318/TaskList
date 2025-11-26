@@ -108,10 +108,6 @@ struct AddTaskScreen: View {
             validationMessage = R.string.message.inputTitle()
             isValidation = true
             return
-        } else if detail.isEmpty {
-            validationMessage = R.string.message.inputDetail()
-            isValidation = true
-            return
         }
         
         do {

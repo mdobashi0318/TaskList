@@ -73,6 +73,13 @@ struct SubTaskDetailScreen: View {
                     }
                 }
             })
+            
+            Section(content: {
+                TextField("工数を入力してください", text: $subTask.noSaveManHours)
+                    .keyboardType(.numbersAndPunctuation)
+            }, header: {
+                Text("工数")
+            })
         }
         .navigationTitle("サブタスク")
         .navigationBarBackButtonHidden()
@@ -105,6 +112,14 @@ struct SubTaskDetailScreen: View {
                 backConfirmAlert = false
             }, label: {
                 Text("キャンセル")
+            })
+            
+        })
+        .alert(validationMessage, isPresented: $isValidation, actions: {
+            Button(role: .cancel, action: {
+                backConfirmAlert = false
+            }, label: {
+                Text(R.string.button.close())
             })
             
         })
@@ -143,6 +158,11 @@ struct SubTaskDetailScreen: View {
     private var saveButton: some View {
         Button(role: .none, action: {
             do {
+                if !subTask.isDoubleManHours {
+                    validationMessage = "工数の値が不正です。"
+                    isValidation = true
+                    return
+                }
                 subTask.update(isSetStartDate: isSetStartDate, isSetEndDate: isSetEndDate)
                 try modelContext.save()
                 dismiss()

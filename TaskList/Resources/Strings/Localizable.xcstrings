@@ -57,6 +57,23 @@
         }
       }
     },
+    "ManHour" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Man-hours"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "工数"
+          }
+        }
+      }
+    },
     "NoTaskList" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -114,6 +131,12 @@
 
     },
     "変更箇所を戻して、前画面に戻る" : {
+
+    },
+    "工数" : {
+
+    },
+    "工数を入力してください" : {
 
     },
     "日時" : {

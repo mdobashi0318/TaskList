@@ -30,6 +30,8 @@ class SubTask {
     /// タグ
     var tag: String?
     
+    var manHours: String = ""
+    
     var created_at: String = ""
     
     var updated_at: String = ""
@@ -52,6 +54,26 @@ class SubTask {
         } set {
             deadline = DateFormatter.format_yyyyMMddHHmm(newValue)
         }
+    }
+    
+    @Transient
+    var noSaveManHours: String {
+        get {
+            manHours
+        } set {
+            manHours = "\(floor((Double(newValue) ?? 0) * 100)/100)"
+        }
+    }
+    
+    @Transient
+    var isDoubleManHours: Bool {
+        if manHours.isEmpty {
+            return true
+        }
+        guard let _ = Double(manHours) else {
+            return false
+        }
+        return true
     }
     
     
@@ -101,6 +123,9 @@ class SubTask {
         self.updated_at = DateFormatter.created_at
     }
     
+    func dispHour() -> String {
+        "\(floor((Double(manHours) ?? 0) * 100)/100)"
+    }
     
 }
 

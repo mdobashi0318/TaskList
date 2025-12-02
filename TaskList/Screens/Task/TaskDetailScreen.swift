@@ -44,6 +44,11 @@ struct TaskDetailScreen: View {
             }
             dateRow
             pickerSection
+            Section(content: {
+                Text("\(hours())")
+            }, header: {
+                Text("工数")
+            })
             subTaskSection
         }
         .navigationTitle("Task詳細")
@@ -244,5 +249,14 @@ struct TaskDetailScreen: View {
         if subTask.status == TaskStatus.inProcess.rawValue {
             model.status = TaskStatus.inProcess.rawValue
         }
+    }
+    
+    
+    private func hours() -> String {
+        var hour: Double = 0.0
+        model.childTask.forEach {
+            hour += Double($0.manHours) ?? 0
+        }
+        return "\(floor(hour * 100)/100)"
     }
 }

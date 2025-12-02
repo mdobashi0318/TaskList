@@ -36,6 +36,9 @@ struct SubTaskRow: View {
                         .tint(Color.textColor)
                         .accessibility(identifier: "titlelabel")
                         .frame(alignment: .center)
+                    Text(subTask.dispHour())
+                        .tint(Color.textColor)
+                        .frame(alignment: .center)
                     Spacer()
                     
                     Picker(R.string.label.status(), selection: $subTask.status) {

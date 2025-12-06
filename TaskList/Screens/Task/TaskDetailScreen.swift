@@ -106,12 +106,6 @@ struct TaskDetailScreen: View {
         .fullScreenCover(isPresented: $isShowAddSubTaskSheet) {
             AddSubTaskScreen(taskModel: model)
         }
-        .task(id: model.status) {
-            try? modelContext.save()
-        }
-        .task(id: model.priority) {
-            try? modelContext.save()
-        }
     }
     
     
@@ -149,6 +143,9 @@ struct TaskDetailScreen: View {
                         .tag($0.rawValue)
                 }
             }
+            .onChange(of: model.status, {
+                try? modelContext.save()
+            })
             
             Picker(R.string.label.priority(), selection: $model.priority) {
                 ForEach(Prioritys.allCases) {
@@ -156,6 +153,9 @@ struct TaskDetailScreen: View {
                         .tag($0.rawValue)
                 }
             }
+            .onChange(of: model.priority, {
+                try? modelContext.save()
+            })
         }
     }
     

@@ -36,6 +36,9 @@ struct SubTaskRow: View {
                         .tint(Color.textColor)
                         .accessibility(identifier: "titlelabel")
                         .frame(alignment: .center)
+                    Text(subTask.dispHour())
+                        .tint(Color.textColor)
+                        .frame(alignment: .center)
                     Spacer()
                     
                     Picker(R.string.label.status(), selection: $subTask.status) {
@@ -44,13 +47,13 @@ struct SubTaskRow: View {
                                 .tag($0)
                         }
                     }
+                    .onChange(of: subTask.status) {
+                        try? modelContext.save()
+                    }
                     .tint(Color.textColor)
                     .background(Color.systemBackground)
                     .padding(.bottom, 5)
                 }
             })
-            .task(id: subTask.status) {
-                try? modelContext.save()
-            }
     }
 }

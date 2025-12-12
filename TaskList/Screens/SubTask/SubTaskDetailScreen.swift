@@ -25,17 +25,50 @@ struct SubTaskDetailScreen: View {
         
     @State private var backConfirmAlert: Bool = false
     
+    @State private var title: String = ""
+    @State private var detail: String = ""
+    @State private var startDate: Date = Date()
+    @State private var endDate: Date = Date()
+    @State private var priority: String = ""
+    @State private var status: String = ""
+    @State private var manHours: String = "" {
+        didSet {
+            manHours = "\(floor((Double(manHours) ?? 0) * 100)/100)"
+        }
+    }
+    
+    private var isDoubleManHours: Bool {
+        if manHours.isEmpty {
+            return true
+        }
+        guard let _ = Double(manHours) else {
+            return false
+        }
+        return true
+    }
+    
+    init(subTask: SubTask) {
+        _subTask = .init(subTask)
+        _title = .init(initialValue: subTask.title)
+        _detail = .init(initialValue: subTask.detail)
+        _detail = .init(initialValue: subTask.detail)
+        _startDate = .init(initialValue: DateFormatter.format_yyyyMMddHHmm_str(subTask.startDate ?? ""))
+        _endDate = .init(initialValue: DateFormatter.format_yyyyMMddHHmm_str(subTask.deadline ?? ""))
+        _priority = .init(initialValue: subTask.priority)
+        _status = .init(initialValue: subTask.status)
+        _manHours = .init(initialValue: subTask.manHours)
+    }
     
     var body: some View {
         List {
             Section(content: {
-                TextField(R.string.message.inputTitle(), text: $subTask.title)
+                TextField(R.string.message.inputTitle(), text: $title)
             }, header: {
                 Text(R.string.label.title())
             })
             
             Section(content: {
-                TextField(R.string.message.inputDetail(), text: $subTask.detail)
+                TextField(R.string.message.inputDetail(), text: $detail)
             }, header: {
                 Text(R.string.label.detail())
             })
@@ -44,13 +77,13 @@ struct SubTaskDetailScreen: View {
                 Toggle(R.string.message.isSetStartDate(), isOn: $isSetStartDate)
                 
                 if isSetStartDate {
-                    DatePicker(R.string.message.inputStartDate(), selection: $subTask.noSaveStartDate)
+                    DatePicker(R.string.message.inputStartDate(), selection: $startDate)
                 }
                 
                 Toggle(R.string.message.isSetDeadline(), isOn: $isSetEndDate)
                 
                 if isSetEndDate {
-                    DatePicker(R.string.message.inputDeadline(), selection: $subTask.noSaveDeadline)
+                    DatePicker(R.string.message.inputDeadline(), selection: $endDate)
                 }
                 
             }, header: {
@@ -59,19 +92,26 @@ struct SubTaskDetailScreen: View {
             
             
             Section(content: {
-                Picker(R.string.label.priority(), selection: $subTask.priority) {
+                Picker(R.string.label.priority(), selection: $priority) {
                     ForEach(Prioritys.allCases) {
                         Text($0.title)
                             .tag($0)
                     }
                 }
                 
-                Picker(R.string.label.status(), selection: $subTask.status) {
+                Picker(R.string.label.status(), selection: $status) {
                     ForEach(TaskStatus.allCases) {
                         Text($0.title)
                             .tag($0)
                     }
                 }
+            })
+            
+            Section(content: {
+                TextField("工数を入力してください", text: $manHours)
+                    .keyboardType(.numbersAndPunctuation)
+            }, header: {
+                Text("工数")
             })
         }
         .navigationTitle("サブタスク")
@@ -79,7 +119,15 @@ struct SubTaskDetailScreen: View {
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 Button(action: {
-                    guard modelContext.hasChanges else {
+                    guard subTask.hasChanges(title: title,
+                                             detail: detail,
+                                             startDate: DateFormatter.format_yyyyMMddHHmm(startDate),
+                                             deadline: DateFormatter.format_yyyyMMddHHmm(endDate),
+                                             priority: priority,
+                                             status: status,
+                                             manHours: manHours,
+                                             isSetStartDate: isSetStartDate,
+                                             isSetEndDate: isSetEndDate) else {
                         dismiss()
                         return
                     }
@@ -108,34 +156,17 @@ struct SubTaskDetailScreen: View {
             })
             
         })
+        .alert(validationMessage, isPresented: $isValidation, actions: {
+            Button(role: .cancel, action: {
+                backConfirmAlert = false
+            }, label: {
+                Text(R.string.button.close())
+            })
+            
+        })
         .task(id: subTask) {
             isSetStartDate = subTask.startDate != nil
             isSetEndDate = subTask.deadline != nil
-        }
-        .task(id: isSetStartDate) {
-            if isSetStartDate {
-                if subTask.startDate == nil {
-                    subTask.startDate = DateFormatter.format_yyyyMMddHHmm()
-                }
-            } else {
-                /// 最初からnilだった時に、変更扱いになってしまうので、nilじゃないときにnilを入れるようにする
-                if subTask.startDate != nil {
-                    subTask.startDate = nil
-                }
-            }
-        }
-        .task(id: isSetEndDate) {
-            if isSetEndDate {
-                if subTask.deadline == nil {
-                    subTask.deadline = DateFormatter.format_yyyyMMddHHmm()
-                }
-            } else {
-                /// 最初からnilだった時に、変更扱いになってしまうので、nilじゃないときにnilを入れるようにする
-                if subTask.deadline != nil {
-                    subTask.deadline = nil
-                }
-            }
-            
         }
     }
     
@@ -143,7 +174,19 @@ struct SubTaskDetailScreen: View {
     private var saveButton: some View {
         Button(role: .none, action: {
             do {
-                subTask.update(isSetStartDate: isSetStartDate, isSetEndDate: isSetEndDate)
+                if !isDoubleManHours {
+                    validationMessage = "工数の値が不正です。"
+                    isValidation = true
+                    return
+                }
+                subTask.update(isSetStartDate: isSetStartDate, isSetEndDate: isSetEndDate,
+                               title: title,
+                               detail: detail,
+                               startDate: startDate,
+                               deadline: endDate,
+                               priority: priority,
+                               status: status,
+                               manHours: manHours)
                 try modelContext.save()
                 dismiss()
             } catch {

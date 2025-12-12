@@ -106,10 +106,6 @@ struct EditTaskScreen: View {
             validationMessage = R.string.message.inputTitle()
             isValidation = true
             return
-        } else if model.detail.isEmpty {
-            validationMessage = R.string.message.inputDetail()
-            isValidation = true
-            return
         }
         
         do {

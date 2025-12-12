@@ -30,31 +30,12 @@ class SubTask {
     /// タグ
     var tag: String?
     
+    var manHours: String = ""
+    
     var created_at: String = ""
     
     var updated_at: String = ""
-    
-    
-    @Transient
-    var noSaveStartDate: Date {
-        get {
-            DateFormatter.format_yyyyMMddHHmm_str(startDate ?? "")
-        } set {
-            startDate = DateFormatter.format_yyyyMMddHHmm(newValue)
-        }
-    }
-    
-    
-    @Transient
-    var noSaveDeadline: Date {
-        get {
-            DateFormatter.format_yyyyMMddHHmm_str(deadline ?? "")
-        } set {
-            deadline = DateFormatter.format_yyyyMMddHHmm(newValue)
-        }
-    }
-    
-    
+
     init() { }
     
     init(id: String, title: String, detail: String, parentTask: TaskModel, startDate: String? = nil, status: String) {
@@ -82,25 +63,46 @@ class SubTask {
     }
     
     
-    func update(isSetStartDate: Bool, isSetEndDate: Bool) {
+    func update(isSetStartDate: Bool, isSetEndDate: Bool, title: String, detail: String, startDate: Date?, deadline: Date?, priority: String, status: String, manHours: String) {
         if isSetStartDate {
-            if startDate == nil {
-                startDate = DateFormatter.format_yyyyMMddHHmm()
-            }
+            self.startDate = DateFormatter.format_yyyyMMddHHmm(startDate ?? Date.now)
         } else {
-            startDate = nil
+            self.startDate = nil
         }
         
         if isSetEndDate {
-            if deadline == nil {
-                deadline = DateFormatter.format_yyyyMMddHHmm()
-            }
+            self.deadline = DateFormatter.format_yyyyMMddHHmm(deadline ?? Date.now)
         } else {
-            deadline = nil
+            self.deadline = nil
         }
+        self.title = title
+        self.detail = detail
+        self.priority = priority
+        self.status = status
+        self.manHours = "\(floor((Double(manHours) ?? 0) * 100)/100)"
         self.updated_at = DateFormatter.created_at
     }
     
+    func dispHour() -> String {
+        "\(floor((Double(manHours) ?? 0) * 100)/100)"
+    }
+    
+    func hasChanges(title: String, detail: String, startDate: String?, deadline: String?, priority: String, status: String, manHours: String, isSetStartDate: Bool, isSetEndDate: Bool) -> Bool {
+        let startDate = isSetStartDate ? startDate : nil
+        let deadline = isSetEndDate ? deadline : nil
+        
+        if self.title == title &&
+            self.detail == detail &&
+            self.startDate == startDate &&
+            self.deadline == deadline &&
+            self.priority == priority &&
+            self.status == status &&
+            self.manHours == manHours {
+            return false
+        } else {
+            return true
+        }
+    }
     
 }
 

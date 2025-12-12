@@ -1,0 +1,177 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "" : {
+
+    },
+    "%@" : {
+
+    },
+    "%@:%lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@:%2$lld"
+          }
+        }
+      }
+    },
+    "%@(%lld)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@(%2$lld)"
+          }
+        }
+      }
+    },
+    "%lld/%lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld/%2$lld"
+          }
+        }
+      }
+    },
+    "0件" : {
+
+    },
+    "AddNoTask" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No tasks have been registered yet."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タスクがまだ登録されていません"
+          }
+        }
+      }
+    },
+    "ManHour" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Man-hours"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "工数"
+          }
+        }
+      }
+    },
+    "NoTaskList" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "There are no tasks."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タスクはありません。"
+          }
+        }
+      }
+    },
+    "TaskList" : {
+
+    },
+    "Task詳細" : {
+
+    },
+    "キャンセル" : {
+
+    },
+    "このタスクをどうしますか？" : {
+
+    },
+    "サブタスク" : {
+
+    },
+    "ステータス: " : {
+
+    },
+    "タイトル" : {
+
+    },
+    "タイトルを入力してください" : {
+
+    },
+    "保存" : {
+
+    },
+    "優先順位" : {
+
+    },
+    "削除" : {
+
+    },
+    "削除しますか?" : {
+
+    },
+    "変更されている箇所があります、保存して離れますか？" : {
+
+    },
+    "変更箇所を戻して、前画面に戻る" : {
+
+    },
+    "工数" : {
+
+    },
+    "工数を入力してください" : {
+
+    },
+    "日時" : {
+
+    },
+    "期日" : {
+
+    },
+    "期日をセットする" : {
+
+    },
+    "期日を選択してください" : {
+
+    },
+    "編集" : {
+
+    },
+    "詳細" : {
+
+    },
+    "追加" : {
+
+    },
+    "閉じる" : {
+
+    },
+    "開始日時" : {
+
+    },
+    "開始日時をセットする" : {
+
+    },
+    "開始日時を選択してください" : {
+
+    }
+  },
+  "version" : "1.1"
+}

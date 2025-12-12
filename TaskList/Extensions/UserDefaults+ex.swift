@@ -11,6 +11,8 @@ extension UserDefaults {
     
     enum Key: String {
         case selectStatus
+        /// タスクを一回でも追加したことがあるか
+        case addFirstTask
     }
     
 }

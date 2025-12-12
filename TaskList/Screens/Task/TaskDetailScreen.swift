@@ -44,6 +44,11 @@ struct TaskDetailScreen: View {
             }
             dateRow
             pickerSection
+            Section(content: {
+                Text("\(hours())")
+            }, header: {
+                Text("工数")
+            })
             subTaskSection
         }
         .navigationTitle("Task詳細")
@@ -101,12 +106,6 @@ struct TaskDetailScreen: View {
         .fullScreenCover(isPresented: $isShowAddSubTaskSheet) {
             AddSubTaskScreen(taskModel: model)
         }
-        .task(id: model.status) {
-            try? modelContext.save()
-        }
-        .task(id: model.priority) {
-            try? modelContext.save()
-        }
     }
     
     
@@ -144,6 +143,9 @@ struct TaskDetailScreen: View {
                         .tag($0.rawValue)
                 }
             }
+            .onChange(of: model.status, {
+                try? modelContext.save()
+            })
             
             Picker(R.string.label.priority(), selection: $model.priority) {
                 ForEach(Prioritys.allCases) {
@@ -151,6 +153,9 @@ struct TaskDetailScreen: View {
                         .tag($0.rawValue)
                 }
             }
+            .onChange(of: model.priority, {
+                try? modelContext.save()
+            })
         }
     }
     
@@ -244,5 +249,14 @@ struct TaskDetailScreen: View {
         if subTask.status == TaskStatus.inProcess.rawValue {
             model.status = TaskStatus.inProcess.rawValue
         }
+    }
+    
+    
+    private func hours() -> String {
+        var hour: Double = 0.0
+        model.childTask.forEach {
+            hour += Double($0.manHours) ?? 0
+        }
+        return "\(floor(hour * 100)/100)"
     }
 }

@@ -13,15 +13,7 @@ struct TagRow: View {
     
     var body: some View {
         HStack {
-            ZStack {
-                Circle()
-                    .stroke(Color.secondary, lineWidth: 2)
-                    .foregroundColor(Color.clear)
-                    .frame(width: 20, height: 20)
-                Circle()
-                    .foregroundColor(Color(cgColor: tag.color()))
-                    .frame(width: 20, height: 20)
-            }
+            ColorCircleView(color: tag.color())
             Text(tag.name)
             
         }

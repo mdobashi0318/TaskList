@@ -81,6 +81,17 @@
         }
       }
     },
+    "deselect" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "選択解除"
+          }
+        }
+      }
+    },
     "Done" : {
 
     },
@@ -97,6 +108,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "工数"
+          }
+        }
+      }
+    },
+    "NewTask" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New Task"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新しいタスク"
           }
         }
       }
@@ -118,6 +146,23 @@
         }
       }
     },
+    "tag" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "tag"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タグ"
+          }
+        }
+      }
+    },
     "キャンセル" : {
 
     },
@@ -131,6 +176,9 @@
 
     },
     "タグがまだありません" : {
+
+    },
+    "タグの追加" : {
 
     },
     "保存" : {

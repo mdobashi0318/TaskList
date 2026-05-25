@@ -27,6 +27,8 @@ struct IconButton: View {
         case ellipsis
         case xmark
         case tag
+        case chevronDown
+        case chevronUp
         case other(name: String)
         
         var name: String {
@@ -41,6 +43,10 @@ struct IconButton: View {
                 return "xmark"
             case .tag:
                 return "tag"
+            case .chevronDown:
+                return "chevron.down"
+            case .chevronUp:
+                return "chevron.up"
             case .other(let name):
                 return name
             }

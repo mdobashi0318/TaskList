@@ -11,26 +11,20 @@ import SwiftData
 struct AddTaskScreen: View {
     
     @Environment(\.dismiss) private var dismiss
-    
     @Environment(\.modelContext) var modelContext
-    
     var model: TaskModel?
-    
-    
     @State private var title: String = ""
-    
     @State private var detail: String = ""
-    
     @State private var isSetStartDate = false
     @State private var startDate: Date = Date()
-    
     @State private var isSetEndDate = false
     @State private var endDate: Date = Date()
-    
     @State private var priority: Prioritys = .none
-    
     @State private var isValidation = false
     @State private var validationMessage = R.string.message.notYetEntered()
+    @State private var isDetail = false
+    @State private var tag: Tag?
+    @State private var tagSelect = false
     
     @AppStorage(UserDefaults.Key.addFirstTask.rawValue) private var addFirstTask: Bool = false
     
@@ -39,43 +33,59 @@ struct AddTaskScreen: View {
             List {
                 Section(content: {
                     TextField(R.string.message.inputTitle(), text: $title)
-                }, header: {
-                    Text(R.string.label.title())
-                })
-                
-                Section(content: {
                     TextField(R.string.message.inputDetail(), text: $detail, axis: .vertical)
                 }, header: {
-                    Text(R.string.label.detail())
+                    Text("NewTask")
                 })
                 
                 Section(content: {
-                    Toggle(R.string.message.isSetStartDate(), isOn: $isSetStartDate)
-                    
-                    if isSetStartDate {
-                        DatePicker(R.string.message.inputStartDate(), selection: $startDate)
-                    }
-                    
-                    Toggle(R.string.message.isSetDeadline(), isOn: $isSetEndDate)
-                    
-                    if isSetEndDate {
-                        DatePicker(R.string.message.inputDeadline(), selection: $endDate)
-                    }
-                    
-                }, header: {
-                    Text(R.string.label.date())
-                })
-                
-                
-                Section(content: {
-                    Picker(R.string.label.priority(), selection: $priority) {
-                        ForEach(Prioritys.allCases) {
-                            Text($0.title)
-                                .tag($0)
+                    if isDetail {
+                        Toggle(R.string.message.isSetStartDate(), isOn: $isSetStartDate)
+                        
+                        if isSetStartDate {
+                            DatePicker(R.string.message.inputStartDate(), selection: $startDate)
+                        }
+                        
+                        Toggle(R.string.message.isSetDeadline(), isOn: $isSetEndDate)
+                        
+                        if isSetEndDate {
+                            DatePicker(R.string.message.inputDeadline(), selection: $endDate)
                         }
                     }
+                }, header: {
+                    HStack {
+                        Text(R.string.label.detail())
+                        Spacer()
+                        IconButton(action: {
+                            isDetail.toggle()
+                        }, iconName: isDetail ? .chevronDown : .chevronUp)
+                        .foregroundStyle(Color(uiColor: .secondaryLabel))
+                    }
                 })
                 
+                
+                if isDetail {
+                    Section(content: {
+                        Picker(R.string.label.priority(), selection: $priority) {
+                            ForEach(Prioritys.allCases) {
+                                Text($0.title)
+                                    .tag($0)
+                            }
+                        }
+                        HStack {
+                            Button("tag") {
+                                tagSelect.toggle()
+                            }
+                            .foregroundStyle(Color.textColor)
+                            Spacer()
+                            if let tag {
+                                ColorCircleView(color: tag.color())
+                            }
+                            Text(tag?.name ?? "")
+                        }
+                        
+                    })
+                }
                 
             }
             .navigationTitle(R.string.screenTitle.addTaskScreen())
@@ -99,6 +109,9 @@ struct AddTaskScreen: View {
                     Text(R.string.button.close())
                 })
             })
+            .sheet(isPresented: $tagSelect) {
+                SelectTagScreen(tag: $tag)
+            }
         }
     }
     
@@ -116,7 +129,8 @@ struct AddTaskScreen: View {
                           detail: detail,
                           startDate: isSetStartDate ? DateFormatter.format_yyyyMMddHHmm(startDate) : nil,
                           deadline: isSetEndDate ? DateFormatter.format_yyyyMMddHHmm(endDate) : nil,
-                          priority: priority.rawValue)
+                          priority: priority.rawValue,
+                          tag: tag)
             
             modelContext.insert(taskModel)
             try modelContext.save()

@@ -18,16 +18,12 @@ struct TaskDetailScreen: View {
     
     @State private var isShowAlert: Bool = false
     @State private var alertMessage = ""
-    
     @State private var isConfirmAlert = false
-    
     @State private var isConfirmationDialog: Bool = false
-    
     @State private var isShowEditSheet: Bool = false
-    
     @State private var isShowAddSubTaskSheet: Bool = false
-    
     @State private var isShowSubTask: Bool = false
+    @State private var tagSelect = false
     
     var body: some View {
         List {
@@ -106,6 +102,9 @@ struct TaskDetailScreen: View {
         .fullScreenCover(isPresented: $isShowAddSubTaskSheet) {
             AddSubTaskScreen(taskModel: model)
         }
+        .sheet(isPresented: $tagSelect) {
+            SelectTagScreen(tag: $model.tag)
+        }
     }
     
     
@@ -154,6 +153,19 @@ struct TaskDetailScreen: View {
                 }
             }
             .onChange(of: model.priority, {
+                try? modelContext.save()
+            })
+            
+            HStack {
+                Text("tag")
+                Spacer()
+                ColorCircleView(color: model.tag?.color() ?? UIColor.clear.cgColor)
+                Text(model.tag?.name ?? "未設定")
+            }
+            .onTapGesture {
+                tagSelect.toggle()
+            }
+            .onChange(of: model.tag, {
                 try? modelContext.save()
             })
         }

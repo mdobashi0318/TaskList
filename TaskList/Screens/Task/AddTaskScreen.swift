@@ -23,10 +23,11 @@ struct AddTaskScreen: View {
     @State private var isValidation = false
     @State private var validationMessage = R.string.message.notYetEntered()
     @State private var isDetail = false
-    @State private var tag: Tag?
+    @State private var tags: [Tag] = []
     @State private var tagSelect = false
-    
     @AppStorage(UserDefaults.Key.addFirstTask.rawValue) private var addFirstTask: Bool = false
+    
+
     
     var body: some View {
         NavigationStack {
@@ -72,18 +73,7 @@ struct AddTaskScreen: View {
                                     .tag($0)
                             }
                         }
-                        HStack {
-                            Button("tag") {
-                                tagSelect.toggle()
-                            }
-                            .foregroundStyle(Color.textColor)
-                            Spacer()
-                            if let tag {
-                                ColorCircleView(color: tag.color())
-                            }
-                            Text(tag?.name ?? "")
-                        }
-                        
+                        TagGridView(tags: tags, tagSelect: $tagSelect)
                     })
                 }
                 
@@ -110,7 +100,7 @@ struct AddTaskScreen: View {
                 })
             })
             .sheet(isPresented: $tagSelect) {
-                SelectTagScreen(tag: $tag)
+                SelectTagScreen(tag: $tags)
             }
         }
     }
@@ -130,7 +120,7 @@ struct AddTaskScreen: View {
                           startDate: isSetStartDate ? DateFormatter.format_yyyyMMddHHmm(startDate) : nil,
                           deadline: isSetEndDate ? DateFormatter.format_yyyyMMddHHmm(endDate) : nil,
                           priority: priority.rawValue,
-                          tag: tag)
+                          tag: tags)
             
             modelContext.insert(taskModel)
             try modelContext.save()

@@ -13,28 +13,33 @@ struct SelectTagScreen: View {
     @Environment(\.dismiss) private var dismiss
     @Query private var tags: [Tag]
     @State private var isAddViewFlg = false
-    @Binding var tag: Tag?
+    @State private var isShowAlert: Bool = false
+    @Binding var tag: [Tag]
+    private let maxTagCount: Int = 3
     
     var body: some View {
         NavigationStack {
             list
-            .navigationTitle("SelectTagList")
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    IconButton(action: {
-                        dismiss()
-                    }, iconName: .xmark)
+                .navigationTitle("SelectTagList")
+                .toolbar {
+                    ToolbarItem(placement: .topBarLeading) {
+                        IconButton(action: {
+                            dismiss()
+                        }, iconName: .xmark)
+                    }
+                    
+                    ToolbarItem(placement: .topBarTrailing) {
+                        IconButton(action: {
+                            dismiss()
+                        }, iconName: .other(name: "square.and.arrow.down"))
+                    }
                 }
-                
-                ToolbarItem(placement: .topBarTrailing) {
-                    IconButton(action: {
-                        dismiss()
-                    }, iconName: .plus)
+                .sheet(isPresented: $isAddViewFlg) {
+                    AddTagView()
                 }
-            }
-            .sheet(isPresented: $isAddViewFlg) {
-                AddTagView()
-            }
+                .alert(isPresented: $isShowAlert) {
+                    Alert(title: Text("選択できるのは\(maxTagCount)つまでです。"))
+                }
         }
     }
     
@@ -48,7 +53,7 @@ struct SelectTagScreen: View {
                     Text("タグの追加")
                 }
             } else {
-                List(selection: $tag) {
+                List {
                     HStack {
                         Button(action: {
                             isAddViewFlg.toggle()
@@ -58,18 +63,44 @@ struct SelectTagScreen: View {
                         .buttonStyle(.plain)
                         Spacer()
                         Button(action: {
-                            tag = nil
+                            tag = []
                         }) {
                             Text("deselect")
                         }
                         .buttonStyle(.plain)
                     }
-                    ForEach(tags, id: \.self) { tag in
-                        TagRow(tag: tag)
+                    ForEach(tags, id: \.self) { item in
+                        HStack {
+                            TagRow(tag: item)
+                            Spacer()
+                            if isSelected(item) {
+                                Image(systemName: "checkmark")
+                                    .foregroundStyle(.tint)
+                            }
+                        }
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            toggleSelection(item)
+                        }
                     }
                 }
-                .environment(\.editMode, .constant(.active))
             }
+        }
+    }
+    
+    private func isSelected(_ item: Tag) -> Bool {
+        tag.contains(where: { $0 == item })
+    }
+    
+    private func toggleSelection(_ item: Tag) {
+        if let index = tag.firstIndex(where: { $0 == item }) {
+            tag.remove(at: index)
+        } else {
+            guard maxTagCount > tag.count else {
+                isShowAlert.toggle()
+                return
+            }
+            tag.append(item)
         }
     }
 }

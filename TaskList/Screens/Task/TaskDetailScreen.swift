@@ -103,7 +103,7 @@ struct TaskDetailScreen: View {
             AddSubTaskScreen(taskModel: model)
         }
         .sheet(isPresented: $tagSelect) {
-            SelectTagScreen(tag: $model.tag)
+            SelectTagScreen(tag: $model.tags)
         }
     }
     
@@ -155,19 +155,10 @@ struct TaskDetailScreen: View {
             .onChange(of: model.priority, {
                 try? modelContext.save()
             })
-            
-            HStack {
-                Text("tag")
-                Spacer()
-                ColorCircleView(color: model.tag?.color() ?? UIColor.clear.cgColor)
-                Text(model.tag?.name ?? "未設定")
-            }
-            .onTapGesture {
-                tagSelect.toggle()
-            }
-            .onChange(of: model.tag, {
-                try? modelContext.save()
-            })
+            TagGridView(tags: model.tags, tagSelect: $tagSelect)
+                .onChange(of: model.tags, {
+                    try? modelContext.save()
+                })
         }
     }
     

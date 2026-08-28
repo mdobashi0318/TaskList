@@ -29,9 +29,11 @@ struct SelectTagScreen: View {
                     }
                     
                     ToolbarItem(placement: .topBarTrailing) {
-                        IconButton(action: {
+                        Button(action: {
                             dismiss()
-                        }, iconName: .other(name: "square.and.arrow.down"))
+                        }, label: {
+                            Text("Done")
+                        })
                     }
                 }
                 .sheet(isPresented: $isAddViewFlg) {
@@ -55,12 +57,16 @@ struct SelectTagScreen: View {
             } else {
                 List {
                     HStack {
-                        Button(action: {
-                            isAddViewFlg.toggle()
-                        }) {
-                            Text("タグの追加")
+                        VStack {
+                            Button(action: {
+                                isAddViewFlg.toggle()
+                            }) {
+                                Text("タグの追加")
+                            }
+                            .buttonStyle(.plain)
+                            Text("※\(maxTagCount)つまで選択可")
+                                .font(.caption2)
                         }
-                        .buttonStyle(.plain)
                         Spacer()
                         Button(action: {
                             tag = []

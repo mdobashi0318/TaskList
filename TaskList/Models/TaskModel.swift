@@ -12,7 +12,7 @@ import SwiftData
 class TaskModel {
     
     @Attribute(.unique) var id: String = ""
-    
+    /// title
     var title: String = ""
     /// 詳細
     var detail: String = ""
@@ -27,9 +27,10 @@ class TaskModel {
     var priority: String = Prioritys.none.rawValue
     /// 状態
     var status: String = TaskStatus.notImplemented.rawValue
-    
+    /// タグ
+    @Relationship(deleteRule: .noAction)
+    var tags: [Tag] = []
     var created_at: String = ""
-    
     var updated_at: String = ""
     
     
@@ -68,7 +69,7 @@ class TaskModel {
     }
     
     
-    func add(title: String, detail: String, startDate: String?, deadline: String?, priority: String) {
+    func add(title: String, detail: String, startDate: String?, deadline: String?, priority: String, tag: [Tag]) {
         let created_at = DateFormatter.created_at
         
         self.id = UUID().uuidString
@@ -79,6 +80,7 @@ class TaskModel {
         self.deadline = deadline
         self.priority = priority
         self.status = TaskStatus.notImplemented.rawValue
+        self.tags = tag
         self.created_at = created_at
         self.updated_at = created_at
     }

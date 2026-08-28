@@ -13,7 +13,7 @@ struct TaskListApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .modelContainer(for: [TaskModel.self, SubTask.self],isAutosaveEnabled: false)
+                .modelContainer(for: [TaskModel.self, SubTask.self, Tag.self], isAutosaveEnabled: false)
         }
     }
 }
